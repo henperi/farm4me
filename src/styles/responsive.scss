@@ -1,0 +1,134 @@
+@import 'variables.scss', 'margins.scss', 'padding.scss', 'mixins.scss';
+
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+
+  &--reversed {
+    flex-direction: row-reverse;
+  }
+
+  @include alignment('');
+}
+
+.col {
+  display: flex;
+  flex-flow: column;
+
+  @include alignment('');
+  @include generateColumns('');
+}
+
+.hidden {
+  display: none;
+}
+
+/*
+=====================
+Large Desktop Devices and Upwards
+=====================
+*/
+@media screen and (min-width: $xl) {
+  .col-xl {
+    @include generateColumns('.col-xl');
+  }
+  .hidden-xl {
+    display: none !important;
+  }
+}
+/*
+=====================
+Normal Desktop Devices and Below
+=====================
+*/
+@media screen and (max-width: $lg) {
+  .col-lg {
+    @include generateColumns('.col-lg');
+  }
+  .hidden-lg-down {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: $md) and (max-width: $lg) {
+  // meduim to large device
+  .hidden-lg {
+    display: none !important;
+  }
+}
+
+/*
+=====================
+Meduim Devices and Below
+=====================
+*/
+@media screen and (max-width: $md) {
+  .col-md {
+    @include generateColumns('');
+  }
+  .hidden-md-down {
+    display: none !important;
+  }
+}
+// small to meduim device
+@media only screen and (min-width: $sm) and (max-width: $md) {
+  .hidden-md {
+    display: none !important;
+  }
+}
+
+/*
+=====================
+Small Devices and Below
+=====================
+*/
+@media screen and (max-width: $sm) {
+  .col-sm {
+    @include generateColumns('');
+  }
+  .hidden-sm-down {
+    display: none !important;
+  }
+}
+// extra small to small device
+@media only screen and (min-width: $xs) and (max-width: $sm) {
+  .hidden-sm {
+    display: none !important;
+  }
+}
+
+/*
+=====================
+Extra Small Mobile Devices and Below
+=====================
+*/
+@media screen and (max-width: $xs) {
+  .col-xs {
+    @include generateColumns('');
+  }
+  .hidden-xs-down {
+    display: none !important;
+  }
+}
+// 0 to extra small devices
+@media only screen and (min-width: 0px) and (max-width: $xs) {
+  .hidden-xs {
+    display: none !important;
+  }
+}

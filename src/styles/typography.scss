@@ -1,0 +1,82 @@
+/*
+===================================
+Typography
+===================================
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Heebo', sans-serif;
+  margin: 4px 0;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: lighter;
+  color: #585d70;
+  font-size: 16px;
+}
+
+.title {
+  font-size: 38px;
+  color: rgb(80, 80, 80);
+}
+
+.subtitle {
+  color: rgb(80, 80, 80);
+  font-size: 22px;
+}
+
+.text-light {
+  font-weight: 100;
+  color: rgb(102, 112, 128);
+}
+
+.textColor {
+  &--white {
+    color: #fff;
+  }
+}
+
+.textAlign {
+  &--center {
+    text-align: center;
+  }
+  &--left {
+    text-align: left;
+  }
+  &--right {
+    text-align: right;
+  }
+}
+
+.underline {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: '';
+    bottom: -4px;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(to bottom right, #0b42f5 0%, #34e3ff 100%);
+    box-shadow: 0px 10px 50px rgba(49, 56, 78, 0.1);
+    border-radius: 5px;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    bottom: -4px;
+    left: 52px;
+    width: 5px;
+    height: 4px;
+    background: linear-gradient(to bottom left, #0b42f5 0%, #34e3ff 100%);
+    box-shadow: 0px 10px 50px rgba(49, 56, 78, 0.1);
+    border-radius: 5px;
+  }
+}

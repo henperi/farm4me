@@ -1,0 +1,203 @@
+@import '../../styles/colors.scss', '../../styles/variables.scss';
+
+.dashboard {
+  width: 100vw;
+  height: 100%;
+  margin: auto;
+  position: relative;
+  overflow-x: hidden;
+  background-color: $grey;
+
+  $sidebarWidth: 17%;
+  $dashboardWidth: 58%;
+  $remainderWidth: calc(100% - ($sidebarWidth + $dashboardWidth));
+
+  .sidebar {
+    height: 100%;
+    width: $sidebarWidth;
+    background-color: $primary;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0px;
+    position: fixed;
+    top: 0;
+    // z-index: 10;
+
+    @media screen and (max-width: $sm) {
+      z-index: 10;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      top: unset;
+      padding: 0 20px;
+      height: 100px;
+      flex-direction: row;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+      box-shadow: 0px -4px 48px 0px #010a8f4d;
+      justify-content: space-between;
+
+      span {
+        font-size: 12px;
+      }
+    }
+
+    &--link {
+      text-decoration: none;
+      position: relative;
+      margin-top: 20px;
+      display: flex;
+      height: 50px;
+      align-items: center;
+      padding-left: 20%;
+      // justify-content: center;
+      opacity: 0.5;
+
+      &--active,
+      &:hover,
+      &:active {
+        opacity: 1;
+        &::after {
+          position: absolute;
+          content: '';
+          height: 100%;
+          width: 5px;
+          border-top-right-radius: 1000px;
+          border-bottom-right-radius: 1000px;
+          background-color: white;
+          left: 0;
+        }
+      }
+
+      .icon {
+        margin: 0 10px;
+        @media screen and (max-width: $sm) {
+          margin: 10px 0;
+        }
+      }
+
+      @media screen and (max-width: $sm) {
+        height: 100%;
+        padding-left: unset;
+        padding-bottom: 20px;
+        margin: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        left: unset;
+
+        &--active,
+        &:hover,
+        &:active {
+          opacity: 1;
+          &::after {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 5px;
+            border-radius: unset;
+            border-top-left-radius: 1000px;
+            border-top-right-radius: 1000px;
+            background-color: white;
+            bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &--main {
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: $dashboardWidth;
+    background-color: #fff;
+    border-radius: 40px;
+    padding: 40px 35px;
+    padding-top: 60px;
+    left: $sidebarWidth;
+    z-index: 2;
+
+    &::after {
+      position: absolute;
+      content: '';
+      height: 100%;
+      width: 100%;
+      top: 0;
+      z-index: -1;
+      left: 0;
+      border-radius: 40px;
+      background-color: white;
+    }
+
+    &::before {
+      position: absolute;
+      content: '';
+      height: 100%;
+      width: 20%;
+      top: 0;
+      z-index: -2;
+      left: 0;
+      background-color: $primary;
+    }
+
+    .floatingAction--button {
+      position: fixed;
+      bottom: 25px;
+      border-radius: 50%;
+      height: 80px;
+      width: 80px;
+      margin: 20px;
+      z-index: 100;
+      right: 15px;
+      // left: 64.5%;
+
+      @media screen and (max-width: $sm) {
+        bottom: 100px;
+        right: 0;
+        left: unset;
+      }
+    }
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+      border-radius: unset;
+      left: unset;
+      padding: 20px 15px;
+      padding-bottom: 100px;
+
+      &::after {
+        border-radius: unset;
+      }
+    }
+  }
+
+  textarea {
+    padding: 15px 0;
+  }
+
+  input[type='file' i] {
+    // all: unset;
+    width: 80%;
+    // opacity: 0;
+  }
+
+  .fileUpload {
+    position: relative;
+    width: 100%;
+
+    .label {
+      position: absolute;
+
+      @media screen and (max-width: $sm) {
+        top: 100%;
+        right: unset;
+        transform: unset;
+      }
+      top: 50%;
+      transform: translateY(-50%);
+      right: 20px;
+      z-index: 0;
+    }
+  }
+}

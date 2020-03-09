@@ -1,0 +1,160 @@
+.padding {
+  &__all {
+    &--10 {
+      padding: 10px;
+    }
+    &--20 {
+      padding: 20px;
+    }
+    &--40 {
+      padding: 40px;
+    }
+    &--60 {
+      padding: 60px;
+    }
+    &--80 {
+      padding: 80px;
+    }
+    &--100 {
+      padding: 100px;
+    }
+  }
+
+  &__vertical {
+    &--10 {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    &--20 {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    &--40 {
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+    &--60 {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+    &--80 {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+    &--100 {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+  }
+
+  &__horizontal {
+    &--10 {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    &--20 {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    &--40 {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    &--60 {
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+    &--80 {
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+    &--100 {
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+  }
+
+  &__top {
+    &--10 {
+      padding-top: 10px;
+    }
+    &--20 {
+      padding-top: 20px;
+    }
+    &--40 {
+      padding-top: 40px;
+    }
+    &--60 {
+      padding-top: 60px;
+    }
+    &--80 {
+      padding-top: 80px;
+    }
+    &--100 {
+      padding-top: 100px;
+    }
+  }
+
+  &__bottom {
+    &--10 {
+      padding-bottom: 10px;
+    }
+    &--20 {
+      padding-bottom: 20px;
+    }
+    &--40 {
+      padding-bottom: 40px;
+    }
+    &--60 {
+      padding-bottom: 60px;
+    }
+    &--80 {
+      padding-bottom: 80px;
+    }
+    &--100 {
+      padding-bottom: 100px;
+    }
+  }
+
+  &__left {
+    &--10 {
+      padding-left: 10px;
+    }
+    &--20 {
+      padding-left: 20px;
+    }
+    &--40 {
+      padding-left: 40px;
+    }
+    &--60 {
+      padding-left: 60px;
+    }
+    &--80 {
+      padding-left: 80px;
+    }
+    &--100 {
+      padding-left: 100px;
+    }
+  }
+
+  &__right {
+    &--10 {
+      padding-right: 10px;
+    }
+    &--20 {
+      padding-right: 20px;
+    }
+    &--40 {
+      padding-right: 40px;
+    }
+    &--60 {
+      padding-right: 60px;
+    }
+    &--80 {
+      padding-right: 80px;
+    }
+    &--100 {
+      padding-right: 100px;
+    }
+  }
+}

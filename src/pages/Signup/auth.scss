@@ -1,0 +1,100 @@
+@import '../../styles/variables.scss';
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.auth {
+  &--image {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../assets/tractor.png');
+    background-size: cover;
+    position: relative;
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+      background-position: center;
+    }
+
+    .logo {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      color: white;
+    }
+
+    .info {
+      width: 50%;
+      text-align: center;
+      @media screen and (max-width: $sm) {
+        opacity: 0;
+      }
+    }
+
+    &::after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(
+        0deg,
+        rgba(14.000000115484, 14.000000115484, 97.00000181794167, 1) 0%,
+        rgba(102.00000151991844, 114.0000008046627, 251.00000023841858, 1) 86.97916865348816%
+      );
+      z-index: 0;
+      opacity: 0.8;
+
+      @media screen and (max-width: $sm) {
+        opacity: 0.45;
+      }
+    }
+
+    & > * {
+      z-index: 1;
+    }
+  }
+
+  &--form {
+    width: 30%;
+    height: 100%;
+    background-color: #747be5;
+    padding: 100px 35px;
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+      height: fit-content;
+      position: absolute;
+      z-index: 10;
+      bottom: 0;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+      box-shadow: 0px -4px 48px 0px #010a8f4d;
+      padding: 70px 25px;
+      background-color: #747ce5e3;
+    }
+  }
+}
+.link {
+  text-decoration-color: white;
+  text-decoration: none;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1.2px;
+    left: 0;
+    bottom: -2.5px;
+    background-color: #fff;
+    opacity: 0.8;
+  }
+}
