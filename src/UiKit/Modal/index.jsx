@@ -23,7 +23,7 @@ export const StyledModal = styled.div.attrs((props) => ({
     width: 100%;
     background-color: #747be5;
     z-index: -1;
-    opacity: 0.4;
+    opacity: 0.65;
   }
 
   .child {

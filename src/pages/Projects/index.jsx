@@ -87,7 +87,7 @@ export function Project() {
       <Sidebar />
       <Modal
         noPadding
-        width="90%"
+        width="50%"
         smWidth="98%"
         isVisible={showModal}
         onClose={() => setShowModal(false)}
@@ -101,13 +101,19 @@ export function Project() {
           >
             Select your preferred crop
           </Text>
+          <SizedBox height={10} />
           <Scrollable direction="horizontal">
             {cropInvestments.map((crop) => (
-              <CropCard key={crop.id} crop={crop} onSelect={onSelect} />
+              <CropCard
+                key={crop.id}
+                crop={crop}
+                onSelect={onSelect}
+                selectedId={selectedCrop ? selectedCrop.id : ''}
+              />
             ))}
           </Scrollable>
-          <div className="row row__mainAxis--spaceBetweenM padding__all--20">
-            <SizedBox width="38%" smWidth="100%">
+          <div className="row row__mainAxis--spaceBetween padding__all--20">
+            <SizedBox width="48%" smWidth="100%">
               <TextField
                 color="#F6F9FD"
                 required
@@ -119,8 +125,7 @@ export function Project() {
               />
               <SizedBox height={10} />
             </SizedBox>
-            <SizedBox width="10%" smWidth="0%" />
-            <SizedBox width="30%" smWidth="100%">
+            <SizedBox width="48%" smWidth="100%">
               <div className="col">
                 <Text color="#333539" size={18} weight="bold">
                   Summary
@@ -131,11 +136,11 @@ export function Project() {
                     {selectedCrop ? selectedCrop.name : 'None'}
                     {' '}
                     {selectedCrop && (
-                    <Text size={12} color="primary">
-                      (
-                      {moneyFormat(selectedCrop.amount)}
-                      /hectre)
-                    </Text>
+                      <Text size={12} color="primary">
+                        (
+                        {moneyFormat(selectedCrop.amount)}
+                        /hectre)
+                      </Text>
                     )}
                   </Text>
                 </div>

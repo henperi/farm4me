@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Text } from '../../UiKit/Text';
 import { Button } from '../../UiKit/Button';
 import { moneyFormat } from '../../helpers/moneyFormat';
+import { SizedBox } from '../../UiKit/SizedBox';
 
 const StyledCard = styled.div`
   background-color: #fff;
@@ -11,7 +12,7 @@ const StyledCard = styled.div`
   height: fit-content;
   margin: 10px 0px;
   min-height: 40px;
-  box-shadow: 0px 10px 26px 2px rgba(0, 0, 0, 0.13);
+  box-shadow: 0px 5px 26px 0px rgba(0, 0, 0, 0.13);
   overflow: hidden;
   margin-left: 20px !important;
   width: 300px;
@@ -19,13 +20,17 @@ const StyledCard = styled.div`
   scroll-snap-align: start;
 
   .header {
-    background-color: #e3e5fa;
+    background-color: ${(props) => (props.selectedId === props.crop.id ? '#747be5' : '#e3e5fa')};
     padding: 15px 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80px;
     height: fit-content;
+
+    span {
+      color: ${(props) => props.selectedId === props.crop.id && '#fff'};
+    }
   }
 
   .body {
@@ -49,13 +54,13 @@ const StyledCard = styled.div`
  * @returns {JSX.Element} CropCard
  */
 export function CropCard(props) {
-  const { crop, onSelect } = props;
+  const { crop, onSelect, selectedId } = props;
   const {
     id, name, amount, profit, duration, season, insurance, refundPercent,
   } = crop;
 
   return (
-    <StyledCard>
+    <StyledCard {...props}>
       <div className="header col">
         <Text color="#333539" size={20} weight="bold">
           {name}
@@ -70,7 +75,7 @@ export function CropCard(props) {
           Estimated Profit:
           {' '}
           <Text color="accent">
-            N
+N
             {moneyFormat(profit)}
           </Text>
         </Text>
@@ -79,25 +84,27 @@ export function CropCard(props) {
           {' '}
           <Text color="accent">{duration}</Text>
         </Text>
-        <Text color="#333539">
-          Season:
-          {' '}
-          <Text color="accent">{season}</Text>
-        </Text>
-        <Text color="#333539">
-          Insurance:
-          {' '}
-          <Text color="accent">{insurance}</Text>
-        </Text>
-        <Text color="#333539">
-          Refund Policy :
-          {' '}
-          <Text color="accent">{refundPercent}</Text>
-        </Text>
-        <Text color="accent">Money Back Guaranteed</Text>
-
-        <Button color="accent" onClick={() => onSelect(id)}>
-          Select
+        <div className="hidden">
+          <Text color="#333539">
+            Season:
+            {' '}
+            <Text color="accent">{season}</Text>
+          </Text>
+          <Text color="#333539">
+            Insurance:
+            {' '}
+            <Text color="accent">{insurance}</Text>
+          </Text>
+          <Text color="#333539">
+            Refund Policy :
+            {' '}
+            <Text color="accent">{refundPercent}</Text>
+          </Text>
+          <Text color="accent">Money Back Guaranteed</Text>
+        </div>
+        <SizedBox height={10} />
+        <Button color={selectedId === id ? 'primary' : 'accent'} onClick={() => onSelect(id)}>
+          {selectedId === id ? 'Selected' : 'Select'}
         </Button>
       </div>
     </StyledCard>
@@ -116,6 +123,7 @@ CropCard.propTypes = {
     refundPercent: PropTypes.string,
   }),
   onSelect: PropTypes.func,
+  selectedId: PropTypes.string,
 };
 
 CropCard.defaultProps = {
@@ -129,4 +137,5 @@ CropCard.defaultProps = {
     refundPercent: '',
   },
   onSelect: () => {},
+  selectedId: '',
 };

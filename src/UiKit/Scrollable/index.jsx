@@ -8,6 +8,7 @@ const StyledScrollable = styled.div.attrs((props) => ({
   display: flex;
   scroll-snap-type: x mandatory;
   scroll-padding: 50px;
+  background-color: #e8e8e838;
 
   ${(props) => props.styledProps.direction === 'vertical'
     && css`
