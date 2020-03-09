@@ -1,6 +1,6 @@
 import React from 'react';
 import './auth.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { TextField } from '../../UiKit/TextField';
 import { Button } from '../../UiKit/Button';
@@ -12,6 +12,14 @@ import { SizedBox } from '../../UiKit/SizedBox';
  * @returns {JSX.Element} the page
  */
 export function SignupPage() {
+  const history = useHistory();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    history.push({
+      pathname: '/dashboard',
+    });
+  };
   return (
     <main className="main row">
       <div className="auth--image">
@@ -32,7 +40,7 @@ export function SignupPage() {
           to start profiting from Agricultural Farming across Nigeria.
         </Text>
         <SizedBox height={50} />
-        <form>
+        <form onSubmit={onSubmit}>
           <TextField
             className="margin__bottom--50"
             type="text"

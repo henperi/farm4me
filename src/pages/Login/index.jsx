@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Signup/auth.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { TextField } from '../../UiKit/TextField';
 import { Button } from '../../UiKit/Button';
@@ -12,6 +12,15 @@ import { SizedBox } from '../../UiKit/SizedBox';
  * @returns {JSX.Element} the page
  */
 export function LoginPage() {
+  const history = useHistory();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    history.push({
+      pathname: '/dashboard',
+    });
+  };
+
   return (
     <main className="main row">
       <div className="auth--image">
@@ -32,7 +41,7 @@ export function LoginPage() {
           Login to monitor your Agricultural Investments..
         </Text>
         <SizedBox height={50} />
-        <form>
+        <form onSubmit={onSubmit}>
           <TextField required type="text" placeholder="Email" leftIcon="A" />
           <TextField required type="password" placeholder="Password" leftIcon="A" />
 
