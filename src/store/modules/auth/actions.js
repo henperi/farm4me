@@ -48,7 +48,7 @@ export const signup = (signupData) => async (dispatch) => {
   try {
     const {
       data: { data },
-    } = await httpService.post('/auth', signupData);
+    } = await httpService.post('/auth/signup', signupData);
 
     return dispatch(setAuthUser(data.token));
   } catch (error) {
