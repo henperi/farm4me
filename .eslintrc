@@ -25,6 +25,7 @@
     "curly": ["error", "multi-line"],
     "import/prefer-default-export": "off",
     "react/jsx-fragments": "off",
+    "react/jsx-props-no-spreading": "off",
     "import/no-unresolved": [
       2,
       {

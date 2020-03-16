@@ -1,5 +1,6 @@
 import React from 'react';
 import './Dashboard.scss';
+import { useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { Card } from '../../UiKit/Card';
 import { Button } from '../../UiKit/Button';
@@ -7,12 +8,16 @@ import { SizedBox } from '../../UiKit/SizedBox';
 
 import { ReactComponent as AddProjectIcon } from '../../assets/add-project.svg';
 import { Sidebar } from '../../components/Sidebar';
+import { useGlobalStore } from '../../store';
 
 /**
  * The Dashboard
  * @returns {JSX.Element} dashboard
  */
 export function Dashboard() {
+  const { state } = useGlobalStore();
+  const history = useHistory();
+
   return (
     <main className="dashboard row">
       <Sidebar />
@@ -26,7 +31,9 @@ export function Dashboard() {
         <Card>
           <SizedBox width="55%" smWidth="100%">
             <Text as="h2" color="#333539" size={30} weight="bold">
-              Welcome Back Jannie
+              Welcome Back
+              {' '}
+              { state.auth.user.firstName }
               {' '}
             </Text>
             <Text size={16}>
@@ -34,7 +41,7 @@ export function Dashboard() {
             </Text>
           </SizedBox>
           <SizedBox height={20} />
-          <Button>Complete Profile</Button>
+          <Button onClick={() => history.push('/profile')}>Complete Profile</Button>
         </Card>
 
         <SizedBox height={20} />

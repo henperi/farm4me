@@ -1,0 +1,43 @@
+
+export const cropInvestments = [
+  {
+    id: '1a2wQrd',
+    name: 'Maize Project',
+    costPerHectare: 125000,
+    percentageProfit: 18,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    id: '2a2wQrd',
+    name: 'Sesam',
+    costPerHectare: 180000,
+    percentageProfit: 20,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    id: '3a2wQrd',
+    name: 'Millet',
+    costPerHectare: 225000,
+    percentageProfit: 22.5,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    id: '4a2wQrd',
+    name: 'Mellon',
+    costPerHectare: 257000,
+    percentageProfit: 25,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+];

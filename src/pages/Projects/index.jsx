@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text } from '../../UiKit/Text';
 import { Card } from '../../UiKit/Card';
 import { Button } from '../../UiKit/Button';
@@ -13,65 +13,29 @@ import { CropCard } from '../../components/CropCard';
 import { Scrollable } from '../../UiKit/Scrollable';
 import { TextField } from '../../UiKit/TextField';
 import { moneyFormat } from '../../helpers/moneyFormat';
+import { cropInvestments } from '../../mocks/cropInvestment';
+// import { logger } from '../../helpers/logger';
+import { useGlobalStore } from '../../store';
+import { createProject, fetchProjects } from '../../store/modules/projects/actions';
+import { toaster } from '../../helpers/toaster';
 
 /**
  * The Projects
  * @returns {JSX.Element} project component
  */
 export function Project() {
+  const { dispatch, state } = useGlobalStore();
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCrop, setSelectedCrop] = useState(null);
-  const [noOfHectres, setNoOfHectres] = useState(0);
+  const [noOfHectares, setNoOfHectares] = useState(0);
 
   const handleInputChange = (event) => {
     if (!event.target.value) {
-      return setNoOfHectres(0);
+      return setNoOfHectares(0);
     }
-    return setNoOfHectres(event.target.value);
+    return setNoOfHectares(event.target.value);
   };
-
-  const cropInvestments = [
-    {
-      id: '1a2wQrd',
-      name: 'Maize',
-      amount: 227000,
-      profit: 73000,
-      duration: '6 months',
-      season: 'Dry and Wet',
-      insurance: 'Leadway Insurance',
-      refundPercent: '100%',
-    },
-    {
-      id: '2a2wQrd',
-      name: 'Sesam',
-      amount: 127000,
-      profit: 33000,
-      duration: '6 months',
-      season: 'Dry and Wet',
-      insurance: 'Leadway Insurance',
-      refundPercent: '100%',
-    },
-    {
-      id: '3a2wQrd',
-      name: 'Millet',
-      amount: 170000,
-      profit: 43000,
-      duration: '6 months',
-      season: 'Dry and Wet',
-      insurance: 'Leadway Insurance',
-      refundPercent: '100%',
-    },
-    {
-      id: '4a2wQrd',
-      name: 'Mellon',
-      amount: 250000,
-      profit: 83000,
-      duration: '6 months',
-      season: 'Dry and Wet',
-      insurance: 'Leadway Insurance',
-      refundPercent: '100%',
-    },
-  ];
 
   const onSelect = (id) => {
     cropInvestments.map((crop) => {
@@ -81,6 +45,35 @@ export function Project() {
       return crop;
     });
   };
+
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    if (!selectedCrop) {
+      toaster('select a farming project');
+      return null;
+    }
+
+    const investmentId = selectedCrop.id;
+
+    return dispatch(createProject({
+      investmentId,
+      numberOfHecters: noOfHectares,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await dispatch(fetchProjects());
+
+      console.log(response);
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  // logger.log(state.projects);
 
   return (
     <main className="dashboard row">
@@ -92,76 +85,78 @@ export function Project() {
         isVisible={showModal}
         onClose={() => setShowModal(false)}
       >
-        <div className="col">
-          <Text
-            color="#333539"
-            size={16}
-            weight="bold"
-            className="padding__horizontal--20 padding__top--20"
-          >
-            Select your preferred crop
-          </Text>
-          <SizedBox height={10} />
-          <Scrollable direction="horizontal">
-            {cropInvestments.map((crop) => (
-              <CropCard
-                key={crop.id}
-                crop={crop}
-                onSelect={onSelect}
-                selectedId={selectedCrop ? selectedCrop.id : ''}
-              />
-            ))}
-          </Scrollable>
-          <div className="row row__mainAxis--spaceBetween padding__all--20">
-            <SizedBox width="48%" smWidth="100%">
-              <TextField
-                color="#F6F9FD"
-                required
-                type="number"
-                placeholder="How many hecters do you want?"
-                leftIcon="A"
-                min={0}
-                onChange={handleInputChange}
-              />
-              <SizedBox height={10} />
-            </SizedBox>
-            <SizedBox width="48%" smWidth="100%">
-              <div className="col">
-                <Text color="#333539" size={18} weight="bold">
-                  Summary
-                </Text>
-                <div className="row row__mainAxis--spaceBetween">
-                  <Text>Selected Crop</Text>
-                  <Text color="accent">
-                    {selectedCrop ? selectedCrop.name : 'None'}
-                    {' '}
-                    {selectedCrop && (
+        <form onSubmit={onSubmit}>
+          <div className="col">
+            <Text
+              color="#333539"
+              size={16}
+              weight="bold"
+              className="padding__horizontal--20 padding__top--20"
+            >
+              Select your preferred farming project
+            </Text>
+            <SizedBox height={10} />
+            <Scrollable direction="horizontal">
+              {cropInvestments.map((crop) => (
+                <CropCard
+                  key={crop.id}
+                  crop={crop}
+                  onSelect={onSelect}
+                  selectedId={selectedCrop ? selectedCrop.id : ''}
+                />
+              ))}
+            </Scrollable>
+            <div className="row row__mainAxis--spaceBetween padding__all--20">
+              <SizedBox width="48%" smWidth="100%">
+                <TextField
+                  color="#F6F9FD"
+                  required
+                  type="number"
+                  placeholder="How many hectare do you want?"
+                  leftIcon="A"
+                  min={0}
+                  onChange={handleInputChange}
+                />
+                <SizedBox height={10} />
+              </SizedBox>
+              <SizedBox width="48%" smWidth="100%">
+                <div className="col">
+                  <Text color="#333539" size={18} weight="bold">
+                    Summary
+                  </Text>
+                  <div className="row row__mainAxis--spaceBetween">
+                    <Text>Selected Crop</Text>
+                    <Text color="accent">
+                      {selectedCrop ? selectedCrop.name : 'None'}
+                      {' '}
+                      {selectedCrop && (
                       <Text size={12} color="primary">
                         (
-                        {moneyFormat(selectedCrop.amount)}
-                        /hectre)
+                        {moneyFormat(selectedCrop.costPerHectare)}
+                        /hectare)
                       </Text>
-                    )}
-                  </Text>
+                      )}
+                    </Text>
+                  </div>
+                  <div className="row row__mainAxis--spaceBetween">
+                    <Text>Number of Hectres</Text>
+                    <Text color="accent">{noOfHectares}</Text>
+                  </div>
+                  <div className="row row__mainAxis--spaceBetween">
+                    <Text>Total</Text>
+                    <Text color="accent">
+                      {selectedCrop ? moneyFormat(selectedCrop.costPerHectare * noOfHectares) : 0}
+                    </Text>
+                  </div>
+                  <SizedBox height={10} />
+                  <div className="row row__mainAxis--center">
+                    <Button type="submit">Proceed</Button>
+                  </div>
                 </div>
-                <div className="row row__mainAxis--spaceBetween">
-                  <Text>Number of Hectres</Text>
-                  <Text color="accent">{noOfHectres}</Text>
-                </div>
-                <div className="row row__mainAxis--spaceBetween">
-                  <Text>Total</Text>
-                  <Text color="accent">
-                    {selectedCrop ? moneyFormat(selectedCrop.amount * noOfHectres) : 0}
-                  </Text>
-                </div>
-                <SizedBox height={10} />
-                <div className="row row__mainAxis--center">
-                  <Button>Proceed</Button>
-                </div>
-              </div>
-            </SizedBox>
+              </SizedBox>
+            </div>
           </div>
-        </div>
+        </form>
       </Modal>
       <div className="dashboard--main">
         <Button className="floatingAction--button">
@@ -206,7 +201,9 @@ export function Project() {
             </Button>
           </div>
           <SizedBox height={10} />
-          <Text size={16}>You have no farming projects at the moment</Text>
+          {state.projects.length > 0
+            ? <Text size={16}>You have Projects</Text>
+            : <Text size={16}>You have no farming projects at the moment</Text>}
         </div>
       </div>
     </main>

@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+import React from 'react';
+
 import { ScreenSizes } from '../uiHelper/screenSizes';
 
 const getHeight = (props) => {
@@ -35,10 +37,13 @@ const mediaQueryWidth = (props, size) => {
       }
     `;
   }
+  return css``;
 };
 
-export const SizedBox = styled.div.attrs(() => ({}))`
+const StyledSizedBox = styled.div.attrs(() => ({}))`
   height: ${(props) => getHeight(props)};
   width: ${(props) => getWidth(props)};
   ${(props) => mediaQueryWidth(props, 'sm')};
 `;
+
+export const SizedBox = (props) => <StyledSizedBox {...props} />;

@@ -1,5 +1,8 @@
 import styled, { css } from 'styled-components';
 
+import React, { Fragment } from 'react';
+import PropsType from 'prop-types';
+
 const getButtonType = (props) => {
   const { type } = props;
 
@@ -49,7 +52,7 @@ const getBgColor = (props) => {
   return bgColors.primary;
 };
 
-export const Button = styled.button.attrs((props) => ({
+export const StyledButton = styled.button.attrs((props) => ({
   type: getButtonType(props),
 }))`
   outline: none;
@@ -73,11 +76,11 @@ export const Button = styled.button.attrs((props) => ({
       font-size: 14px;
     `}
 
-    ${(props) => props.size === 'xs'
-      && css`
-        padding: 8px 16px;
-        font-size: 10px;
-      `}
+  ${(props) => props.size === 'xs'
+    && css`
+      padding: 8px 16px;
+      font-size: 10px;
+    `}
 
   &:hover {
     box-shadow: 0px 8px 26px rgba(0, 0, 0, 0.23);
@@ -88,6 +91,25 @@ export const Button = styled.button.attrs((props) => ({
   ${(props) => props.fullWidth && fullWidth}
 `;
 
+
+export const Button = (props) => <StyledButton {...props} />;
+
+Button.propTypes = {
+  className: PropsType.string,
+  type: PropsType.string,
+  color: PropsType.string,
+  size: PropsType.string,
+  fullWidth: PropsType.bool,
+  children: PropsType.node,
+  onClick: PropsType.func,
+};
+
 Button.defaultProps = {
   fullWidth: false,
+  className: 'textField--container',
+  type: 'text',
+  color: 'primary',
+  size: 'md',
+  children: <Fragment />,
+  onClick: () => null,
 };

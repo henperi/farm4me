@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -16,6 +15,7 @@ export const Input = styled.input.attrs((props) => ({
   font-size: 16px;
   flex: 3;
   margin: auto 2%;
+  width: 100%;
 `;
 
 Input.defaultProps = {};
@@ -63,12 +63,19 @@ export const TextField = (props) => {
 };
 
 TextField.propTypes = {
+  as: PropsType.string,
   className: PropsType.string,
   type: PropsType.string,
   placeholder: PropsType.string,
   leftIcon: PropsType.string,
   rightIcon: PropsType.string,
   color: PropsType.string,
+  accept: PropsType.string,
+  value: PropsType.oneOfType([PropsType.string, PropsType.number]),
+  required: PropsType.bool,
+  onChange: PropsType.func,
+  rows: PropsType.number,
+  min: PropsType.oneOfType([PropsType.string, PropsType.number]),
 };
 
 TextField.defaultProps = {
@@ -78,4 +85,11 @@ TextField.defaultProps = {
   leftIcon: '',
   rightIcon: '',
   color: '#fff',
+  accept: null,
+  required: false,
+  onChange: () => null,
+  min: '',
+  rows: 5,
+  as: null,
+  value: undefined,
 };

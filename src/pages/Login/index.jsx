@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Signup/auth.scss';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, /* useHistory, */ Redirect } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { TextField } from '../../UiKit/TextField';
 import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
+import { useGlobalStore } from '../../store';
+import { login } from '../../store/modules/auth/actions';
 
 /**
  * The Login Page
@@ -12,14 +14,22 @@ import { SizedBox } from '../../UiKit/SizedBox';
  * @returns {JSX.Element} the page
  */
 export function LoginPage() {
-  const history = useHistory();
+  const { dispatch, state } = useGlobalStore();
+
+  const [signinData, setSigninData] = useState({
+    email: '',
+    password: '',
+  });
 
   const onSubmit = (event) => {
     event.preventDefault();
-    history.push({
-      pathname: '/dashboard',
-    });
+    return dispatch(login(signinData));
   };
+
+
+  if (state.auth.isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <main className="main row">
@@ -42,8 +52,20 @@ export function LoginPage() {
         </Text>
         <SizedBox height={50} />
         <form onSubmit={onSubmit}>
-          <TextField required type="text" placeholder="Email" leftIcon="A" />
-          <TextField required type="password" placeholder="Password" leftIcon="A" />
+          <TextField
+            required
+            type="text"
+            placeholder="Email"
+            leftIcon="A"
+            onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
+          />
+          <TextField
+            required
+            type="password"
+            placeholder="Password"
+            leftIcon="A"
+            onChange={(e) => setSigninData({ ...signinData, password: e.target.value })}
+          />
 
           <Button type="submit" color="accent">
             Login

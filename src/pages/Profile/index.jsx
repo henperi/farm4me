@@ -5,12 +5,15 @@ import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
 
 import { Sidebar } from '../../components/Sidebar';
+import { useGlobalStore } from '../../store';
 
 /**
  * The Projects
  * @returns {JSX.Element} project component
  */
 export function Profile() {
+  const { state } = useGlobalStore();
+
   return (
     <main className="dashboard row">
       <Sidebar />
@@ -31,6 +34,7 @@ export function Profile() {
                 type="text"
                 placeholder="First Name"
                 leftIcon="A"
+                value={state.auth.user.firstName}
               />
             </SizedBox>
             <SizedBox width="48%" smWidth="100%">
@@ -40,6 +44,7 @@ export function Profile() {
                 type="text"
                 placeholder="Last Name"
                 leftIcon="A"
+                value={state.auth.user.lastName}
               />
             </SizedBox>
           </div>
@@ -50,17 +55,19 @@ export function Profile() {
               type="text"
               placeholder="Phone Number"
               leftIcon="A"
+              value={state.auth.user.phone}
             />
           </SizedBox>
           <SizedBox width="100%" smWidth="100%">
             <TextField
-              as="textArea"
-              rows="5"
+              as="textarea"
+              rows={5}
               color="#F6F9FD"
               required
               type="text"
               placeholder="Address"
               leftIcon="A"
+              value={state.auth.user.address}
             />
           </SizedBox>
           <SizedBox width="100%" smWidth="100%">

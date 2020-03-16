@@ -19,7 +19,7 @@ const StyledScrollable = styled.div.attrs((props) => ({
 
     ${(props) => props.styledProps.direction === 'horizontal'
       && css`
-        overflow-y: auto;
+        overflow-x: auto;
         flex-flow: row nowrap;
         width: 100%;
       `}

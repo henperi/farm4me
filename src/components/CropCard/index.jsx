@@ -56,8 +56,10 @@ const StyledCard = styled.div`
 export function CropCard(props) {
   const { crop, onSelect, selectedId } = props;
   const {
-    id, name, amount, profit, duration, season, insurance, refundPercent,
+    id, name, costPerHectare, percentageProfit, duration, season, insurance, refundPercent,
   } = crop;
+
+  const profit = costPerHectare * (1 + percentageProfit / 100);
 
   return (
     <StyledCard {...props}>
@@ -67,7 +69,7 @@ export function CropCard(props) {
         </Text>
         <Text color="#333539" size={35} weight="bold">
           N
-          {moneyFormat(amount)}
+          {moneyFormat(costPerHectare)}
         </Text>
       </div>
       <div className="body col">
@@ -75,14 +77,14 @@ export function CropCard(props) {
           Estimated Profit:
           {' '}
           <Text color="accent">
-N
+            N
             {moneyFormat(profit)}
           </Text>
         </Text>
         <Text color="#333539">
           Duration:
           {' '}
-          <Text color="accent">{duration}</Text>
+          <Text color="accent">{`${duration} months`}</Text>
         </Text>
         <div className="hidden">
           <Text color="#333539">
@@ -115,9 +117,9 @@ CropCard.propTypes = {
   crop: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string,
-    amount: PropTypes.number,
-    profit: PropTypes.number,
-    duration: PropTypes.string,
+    costPerHectare: PropTypes.number,
+    percentageProfit: PropTypes.number,
+    duration: PropTypes.number,
     season: PropTypes.string,
     insurance: PropTypes.string,
     refundPercent: PropTypes.string,
@@ -129,9 +131,9 @@ CropCard.propTypes = {
 CropCard.defaultProps = {
   crop: {
     name: '',
-    amount: '',
-    profit: '',
-    duration: '',
+    costPerHectare: '',
+    percentageProfit: '',
+    duration: 6,
     season: '',
     insurance: '',
     refundPercent: '',

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import React from 'react';
 
 const TextColors = {
   default: '#757994',
@@ -86,7 +87,7 @@ const getTextSize = (props) => {
   `;
 };
 
-export const Text = styled.span.attrs(() => ({}))`
+const StyledText = styled.span.attrs(() => ({}))`
   color: ${(props) => getTextColor(props.color)};
   font-weight: lighter;
   font-family: 'Open Sans', sans-serif;
@@ -96,5 +97,7 @@ export const Text = styled.span.attrs(() => ({}))`
   ${(props) => getTextSize(props)};
 `;
 
-Text.defaultProps = {
-};
+
+export const Text = (props) => (
+  <StyledText {...props} />
+);

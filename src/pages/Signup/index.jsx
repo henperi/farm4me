@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './auth.scss';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { TextField } from '../../UiKit/TextField';
 import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
+import { useGlobalStore } from '../../store';
+import { signup } from '../../store/modules/auth/actions';
 
 /**
  * The Signup Page
@@ -12,14 +14,24 @@ import { SizedBox } from '../../UiKit/SizedBox';
  * @returns {JSX.Element} the page
  */
 export function SignupPage() {
-  const history = useHistory();
+  const { dispatch, state } = useGlobalStore();
+
+  const [signUpData, setSignUpData] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    phone: '',
+  });
 
   const onSubmit = (event) => {
     event.preventDefault();
-    history.push({
-      pathname: '/dashboard',
-    });
+    return dispatch(signup(signUpData));
   };
+
+  if (state.auth.isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <main className="main row">
       <div className="auth--image">
@@ -47,9 +59,30 @@ export function SignupPage() {
             placeholder="First Name"
             leftIcon="A"
             required
+            onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })}
           />
-          <TextField required type="text" placeholder="Email" leftIcon="A" />
-          <TextField required type="password" placeholder="Password" leftIcon="A" />
+          <TextField
+            className="margin__bottom--50"
+            type="text"
+            placeholder="Phone Number"
+            leftIcon="A"
+            required
+            onChange={(e) => setSignUpData({ ...signUpData, phone: e.target.value })}
+          />
+          <TextField
+            required
+            type="text"
+            placeholder="Email"
+            leftIcon="A"
+            onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
+          />
+          <TextField
+            required
+            type="password"
+            placeholder="Password"
+            leftIcon="A"
+            onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
+          />
 
           <div className="col">
             <label htmlFor="terms" className="row row__crossAxis--center">
@@ -60,7 +93,9 @@ export function SignupPage() {
             </label>
             <SizedBox height={20} />
 
-            <Button type="submit" color="accent">Sign Up</Button>
+            <Button type="submit" color="accent">
+              Sign Up
+            </Button>
           </div>
         </form>
         <SizedBox height={25} />
@@ -69,8 +104,7 @@ export function SignupPage() {
 
         <Link to="/login" className="link">
           <Text color="white" weight="bold" size={18}>
-        Go To Login Instead
-
+            Go To Login Instead
           </Text>
         </Link>
       </div>
