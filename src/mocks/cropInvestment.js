@@ -12,7 +12,7 @@ export const cropInvestments = [
   },
   {
     id: '2a2wQrd',
-    name: 'Sesam',
+    name: 'Sesam Project',
     costPerHectare: 180000,
     percentageProfit: 20,
     duration: 6,
@@ -22,7 +22,7 @@ export const cropInvestments = [
   },
   {
     id: '3a2wQrd',
-    name: 'Millet',
+    name: 'Millet Project',
     costPerHectare: 225000,
     percentageProfit: 22.5,
     duration: 6,
@@ -32,7 +32,7 @@ export const cropInvestments = [
   },
   {
     id: '4a2wQrd',
-    name: 'Mellon',
+    name: 'Mellon Project',
     costPerHectare: 257000,
     percentageProfit: 25,
     duration: 6,

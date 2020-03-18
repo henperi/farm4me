@@ -7,7 +7,7 @@ const httpService = axios.create({
     'Access-Control-Allow-Origin': '*',
   },
 });
-console.log(config);
+
 /**
  * This method sets the necessary authorization when a user is logged in
  * @param {string} token

@@ -33,7 +33,7 @@ export const StyledModal = styled.div.attrs((props) => ({
     overflow-y: scroll;
     height: fit-content;
     background-color: #fff;
-    padding: ${(props) => (props.noPadding ? '20px 0px' : '20px')};
+    padding: ${(props) => (props.noPadding ? '20px 2%' : '20px 2%')};
     position: relative;
     border-radius: 15px;
     transform: translate(0);

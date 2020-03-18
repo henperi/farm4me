@@ -12,11 +12,12 @@ import { types } from './types';
     totalReturns: number,
     profit: number,
     duration: number,
-    costPerHectre: number,
+    costPerHectare: number,
     ownerId: string,
     endDate: any,
     percentageProfit: number,
     id: string,
+    reference: string,
 }} Project
  */
 
@@ -37,6 +38,20 @@ export const projectReducer = (state = projectsInitialState, action) => {
       return [
         ...action.payload.projects,
       ];
+
+    case types.UPDATE_ONE_PROJECT: {
+      const projectToUpdate = action.payload.project;
+      const updatedState = state.map((project) => {
+        if (project.id === projectToUpdate.id) {
+          return projectToUpdate;
+        }
+        return project;
+      });
+
+      return [
+        ...updatedState,
+      ];
+    }
 
     default:
       return state;

@@ -6,18 +6,22 @@ import { SizedBox } from '../../UiKit/SizedBox';
 
 import { ReactComponent as AddProjectIcon } from '../../assets/add-project.svg';
 import { Sidebar } from '../../components/Sidebar';
-import { Modal } from '../../UiKit/Modal';
+// import { Modal } from '../../UiKit/Modal';
 
 import './Project.scss';
-import { CropCard } from '../../components/CropCard';
+// import { CropCard } from '../../components/CropCard';
 import { Scrollable } from '../../UiKit/Scrollable';
-import { TextField } from '../../UiKit/TextField';
-import { moneyFormat } from '../../helpers/moneyFormat';
+// import { TextField } from '../../UiKit/TextField';
+// import { moneyFormat } from '../../helpers/moneyFormat';
 import { cropInvestments } from '../../mocks/cropInvestment';
 // import { logger } from '../../helpers/logger';
 import { useGlobalStore } from '../../store';
 import { createProject, fetchProjects } from '../../store/modules/projects/actions';
 import { toaster } from '../../helpers/toaster';
+import { logger } from '../../helpers/logger';
+import { ProjectCard } from '../../components/ProjectCard';
+import { ProjectModal } from '../../components/ProjectModal';
+import { ProjectPaymentModal } from '../../components/ProjectPaymentModal';
 
 /**
  * The Projects
@@ -29,6 +33,9 @@ export function Project() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCrop, setSelectedCrop] = useState(null);
   const [noOfHectares, setNoOfHectares] = useState(0);
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [createdProject, setCreatedProject] = useState(null);
 
   const handleInputChange = (event) => {
     if (!event.target.value) {
@@ -46,8 +53,15 @@ export function Project() {
     });
   };
 
+  logger.log(state.projects);
 
-  const onSubmit = (event) => {
+  const onClose = () => {
+    setSelectedCrop(null);
+    setShowModal(false);
+    setNoOfHectares(0);
+  };
+
+  const onSubmit = async (event) => {
     event.preventDefault();
 
     if (!selectedCrop) {
@@ -57,107 +71,54 @@ export function Project() {
 
     const investmentId = selectedCrop.id;
 
-    return dispatch(createProject({
+    /**
+     * @type {import('../../store/modules/projects/actions').Project} project
+     */
+    // @ts-ignore
+    const newProject = await dispatch(createProject({
       investmentId,
       numberOfHecters: noOfHectares,
     }));
+
+    if (newProject && newProject.id) {
+      setShowPaymentModal(true);
+      setCreatedProject(newProject);
+
+      onClose();
+    }
+
+    return null;
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await dispatch(fetchProjects());
-
-      console.log(response);
+      await dispatch(fetchProjects());
     };
 
     fetchData();
   }, [dispatch]);
 
-  // logger.log(state.projects);
 
   return (
     <main className="dashboard row">
       <Sidebar />
-      <Modal
-        noPadding
-        width="50%"
-        smWidth="98%"
-        isVisible={showModal}
-        onClose={() => setShowModal(false)}
-      >
-        <form onSubmit={onSubmit}>
-          <div className="col">
-            <Text
-              color="#333539"
-              size={16}
-              weight="bold"
-              className="padding__horizontal--20 padding__top--20"
-            >
-              Select your preferred farming project
-            </Text>
-            <SizedBox height={10} />
-            <Scrollable direction="horizontal">
-              {cropInvestments.map((crop) => (
-                <CropCard
-                  key={crop.id}
-                  crop={crop}
-                  onSelect={onSelect}
-                  selectedId={selectedCrop ? selectedCrop.id : ''}
-                />
-              ))}
-            </Scrollable>
-            <div className="row row__mainAxis--spaceBetween padding__all--20">
-              <SizedBox width="48%" smWidth="100%">
-                <TextField
-                  color="#F6F9FD"
-                  required
-                  type="number"
-                  placeholder="How many hectare do you want?"
-                  leftIcon="A"
-                  min={0}
-                  onChange={handleInputChange}
-                />
-                <SizedBox height={10} />
-              </SizedBox>
-              <SizedBox width="48%" smWidth="100%">
-                <div className="col">
-                  <Text color="#333539" size={18} weight="bold">
-                    Summary
-                  </Text>
-                  <div className="row row__mainAxis--spaceBetween">
-                    <Text>Selected Crop</Text>
-                    <Text color="accent">
-                      {selectedCrop ? selectedCrop.name : 'None'}
-                      {' '}
-                      {selectedCrop && (
-                      <Text size={12} color="primary">
-                        (
-                        {moneyFormat(selectedCrop.costPerHectare)}
-                        /hectare)
-                      </Text>
-                      )}
-                    </Text>
-                  </div>
-                  <div className="row row__mainAxis--spaceBetween">
-                    <Text>Number of Hectres</Text>
-                    <Text color="accent">{noOfHectares}</Text>
-                  </div>
-                  <div className="row row__mainAxis--spaceBetween">
-                    <Text>Total</Text>
-                    <Text color="accent">
-                      {selectedCrop ? moneyFormat(selectedCrop.costPerHectare * noOfHectares) : 0}
-                    </Text>
-                  </div>
-                  <SizedBox height={10} />
-                  <div className="row row__mainAxis--center">
-                    <Button type="submit">Proceed</Button>
-                  </div>
-                </div>
-              </SizedBox>
-            </div>
-          </div>
-        </form>
-      </Modal>
+      <ProjectModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        onSubmit={onSubmit}
+        onSelect={onSelect}
+        selectedCrop={selectedCrop}
+        handleInputChange={handleInputChange}
+        noOfHectares={noOfHectares}
+        onClose={() => onClose()}
+      />
+      {createdProject && (
+      <ProjectPaymentModal
+        showModal={showPaymentModal}
+        setShowModal={setShowPaymentModal}
+        project={createdProject}
+      />
+      )}
       <div className="dashboard--main">
         <Button className="floatingAction--button">
           <AddProjectIcon />
@@ -201,9 +162,19 @@ export function Project() {
             </Button>
           </div>
           <SizedBox height={10} />
-          {state.projects.length > 0
-            ? <Text size={16}>You have Projects</Text>
-            : <Text size={16}>You have no farming projects at the moment</Text>}
+          {
+            state.projects.length > 0 ? (
+              <Scrollable>
+                {state.projects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    only={state.projects.length === 1}
+                  />
+                ))}
+              </Scrollable>
+            ) : (<Text size={16}>You have no farming projects at the moment</Text>)
+          }
         </div>
       </div>
     </main>

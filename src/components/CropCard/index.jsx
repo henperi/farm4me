@@ -14,7 +14,7 @@ const StyledCard = styled.div`
   min-height: 40px;
   box-shadow: 0px 5px 26px 0px rgba(0, 0, 0, 0.13);
   overflow: hidden;
-  margin-left: 20px !important;
+  margin-left: 4% !important;
   width: 300px;
   min-width: 270px;
   scroll-snap-align: start;

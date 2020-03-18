@@ -33,6 +33,17 @@ export const addOneProject = (project) => ({
   },
 });
 
+/**
+ * @description method to add one project to the project store
+ * @param {Project} project
+ * @returns {object} reducer action type and payload
+ */
+export const updateOneProject = (project) => ({
+  type: types.UPDATE_ONE_PROJECT,
+  payload: {
+    project,
+  },
+});
 
 /**
  * @description A thunk action to register a new customer
@@ -41,7 +52,7 @@ export const addOneProject = (project) => ({
  *  numberOfHecters: number,
  * }} createData
  * @param {createData} createProjectData
- * @returns {Function} dispatch an action
+ * @returns {Function | Project} dispatch an action
  */
 export const createProject = (createProjectData) => async (dispatch) => {
   try {
@@ -49,13 +60,56 @@ export const createProject = (createProjectData) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/project', createProjectData);
 
-    return dispatch(addOneProject(data.project));
+    dispatch(addOneProject(data.project));
+    return data.project;
   } catch (error) {
     toaster(error.response.data.message);
     return logger.log(error.response);
   }
 };
 
+/**
+ * @description A thunk action to register a new customer
+ * @typedef {{
+ *  transactionRef: string,
+ * }} startProject
+ * @param {startProject} startProjectData
+ * @returns {Function | Project} dispatch an action
+ */
+export const startProject = (startProjectData) => async (dispatch) => {
+  const { transactionRef } = startProjectData;
+  try {
+    const {
+      data: { data },
+    } = await httpService.post(`/project/start/${transactionRef}`, startProjectData);
+
+    dispatch(updateOneProject(data.updatedProject));
+    return data.project;
+  } catch (error) {
+    toaster(error.response.data.message);
+    return logger.log(error.response);
+  }
+};
+
+/**
+ * @description A thunk action to register a new customer
+ * @param {string} projectId
+ * @returns {Promise<string>} dispatch an action
+ */
+export const generateReference = async (projectId) => {
+  try {
+    const {
+      data: { data },
+    } = await httpService.post(`/project/generateRef/${projectId}`);
+
+    return data.reference;
+  } catch (error) {
+    toaster(error.response.data.message);
+    logger.log(error.response);
+
+    return null;
+  }
+};
 
 /**
  * @description A thunk action to register a new customer
@@ -71,8 +125,9 @@ export const fetchProjects = () => async (dispatch) => {
 
     return data.projects;
   } catch (error) {
-    toaster(error.response.data.message);
-    logger.log(error.response);
+    logger.log(error);
+
+    toaster(error.response ? error.response.data.message : error);
 
     return (error.response);
   }

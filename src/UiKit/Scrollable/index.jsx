@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
+import { ScreenSizes } from '../uiHelper/screenSizes';
 
 const StyledScrollable = styled.div.attrs((props) => ({
   ...props.styledProps,
@@ -8,7 +9,7 @@ const StyledScrollable = styled.div.attrs((props) => ({
   display: flex;
   scroll-snap-type: x mandatory;
   scroll-padding: 50px;
-  background-color: #e8e8e838;
+  // background-color: #e8e8e838;
 
   ${(props) => props.styledProps.direction === 'vertical'
     && css`
@@ -22,6 +23,13 @@ const StyledScrollable = styled.div.attrs((props) => ({
         overflow-x: auto;
         flex-flow: row nowrap;
         width: 100%;
+        width: calc(100% + 7.4%);
+        margin-left: -3.7%;
+
+        @media screen and (max-width: ${ScreenSizes.sm}) {
+          width: calc(100% + 4%);
+          margin-left: -2%;
+        }
       `}
 
     ${(props) => props.styledProps.hideScrollBar
