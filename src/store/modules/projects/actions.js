@@ -1,7 +1,7 @@
 import { types } from './types';
 import httpService from '../../../services/httpService';
-import { logger } from '../../../helpers/logger';
-import { toaster } from '../../../helpers/toaster';
+
+import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
 
 /**
  * @typedef {import('./reducer').Project} Project
@@ -63,8 +63,7 @@ export const createProject = (createProjectData) => async (dispatch) => {
     dispatch(addOneProject(data.project));
     return data.project;
   } catch (error) {
-    toaster(error.response.data.message);
-    return logger.log(error.response);
+    return axiosErrorHandler(error, dispatch);
   }
 };
 
@@ -86,28 +85,7 @@ export const startProject = (startProjectData) => async (dispatch) => {
     dispatch(updateOneProject(data.updatedProject));
     return data.project;
   } catch (error) {
-    toaster(error.response.data.message);
-    return logger.log(error.response);
-  }
-};
-
-/**
- * @description A thunk action to register a new customer
- * @param {string} projectId
- * @returns {Promise<string>} dispatch an action
- */
-export const generateReference = async (projectId) => {
-  try {
-    const {
-      data: { data },
-    } = await httpService.post(`/project/generateRef/${projectId}`);
-
-    return data.reference;
-  } catch (error) {
-    toaster(error.response.data.message);
-    logger.log(error.response);
-
-    return null;
+    return axiosErrorHandler(error, dispatch);
   }
 };
 
@@ -125,10 +103,6 @@ export const fetchProjects = () => async (dispatch) => {
 
     return data.projects;
   } catch (error) {
-    logger.log(error);
-
-    toaster(error.response ? error.response.data.message : error);
-
-    return (error.response);
+    return axiosErrorHandler(error, dispatch);
   }
 };

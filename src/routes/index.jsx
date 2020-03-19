@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/Login';
 import { Dashboard } from '../pages/Dashboard';
 import { Project } from '../pages/Projects';
 import { Profile } from '../pages/Profile';
+import { NetworkError } from '../components/NetworkError';
 
 /**
  * App Routing Component
@@ -17,6 +18,7 @@ import { Profile } from '../pages/Profile';
 export function Routes() {
   return (
     <BrowserRouter>
+      <NetworkError />
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
         <Route exact path="/signup" component={SignupPage} />

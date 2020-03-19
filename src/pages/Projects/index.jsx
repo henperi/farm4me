@@ -6,19 +6,13 @@ import { SizedBox } from '../../UiKit/SizedBox';
 
 import { ReactComponent as AddProjectIcon } from '../../assets/add-project.svg';
 import { Sidebar } from '../../components/Sidebar';
-// import { Modal } from '../../UiKit/Modal';
 
 import './Project.scss';
-// import { CropCard } from '../../components/CropCard';
 import { Scrollable } from '../../UiKit/Scrollable';
-// import { TextField } from '../../UiKit/TextField';
-// import { moneyFormat } from '../../helpers/moneyFormat';
 import { cropInvestments } from '../../mocks/cropInvestment';
-// import { logger } from '../../helpers/logger';
 import { useGlobalStore } from '../../store';
 import { createProject, fetchProjects } from '../../store/modules/projects/actions';
 import { toaster } from '../../helpers/toaster';
-import { logger } from '../../helpers/logger';
 import { ProjectCard } from '../../components/ProjectCard';
 import { ProjectModal } from '../../components/ProjectModal';
 import { ProjectPaymentModal } from '../../components/ProjectPaymentModal';
@@ -53,7 +47,6 @@ export function Project() {
     });
   };
 
-  logger.log(state.projects);
 
   const onClose = () => {
     setSelectedCrop(null);

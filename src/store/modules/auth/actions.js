@@ -1,8 +1,7 @@
 import JWT from 'jsonwebtoken';
 import types from './types';
 import httpService, { setAuthHeader, removeAuthHeader } from '../../../services/httpService';
-import { logger } from '../../../helpers/logger';
-import { toaster } from '../../../helpers/toaster';
+import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
 
 /**
  * @description method to set the auth user
@@ -20,6 +19,7 @@ export const setAuthUser = (token) => {
     },
   };
 };
+
 /**
  * @description method to remove the auth user
  * @returns {object} reducer action type
@@ -52,8 +52,7 @@ export const signup = (signupData) => async (dispatch) => {
 
     return dispatch(setAuthUser(data.token));
   } catch (error) {
-    toaster(error.response.data.message);
-    return logger.log(error.response);
+    return axiosErrorHandler(error, dispatch);
   }
 };
 
@@ -74,9 +73,6 @@ export const login = (loginData) => async (dispatch) => {
 
     return dispatch(setAuthUser(data.token));
   } catch (error) {
-    toaster(error.response.data.message);
-    logger.log(error.response);
-
-    return (error.response);
+    return axiosErrorHandler(error, dispatch);
   }
 };

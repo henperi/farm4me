@@ -2,6 +2,7 @@ import types from './types';
 
 export const appInitialState = {
   isReady: false,
+  noNetwork: false,
 };
 
 export const appReducer = (state = appInitialState, action) => {
@@ -10,6 +11,12 @@ export const appReducer = (state = appInitialState, action) => {
       return {
         ...state,
         isReady: true,
+      };
+
+    case types.SET_NETWORK_ERROR:
+      return {
+        ...state,
+        noNetwork: action.payload.status,
       };
 
     default:

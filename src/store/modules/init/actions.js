@@ -11,6 +11,18 @@ export const initApp = () => ({
 });
 
 
+/**
+ * @description method to set the status of network error
+ * @param {boolean} status
+ * @returns {object} reducer action type and payload
+ */
+export const setNetworkError = (status) => ({
+  type: types.SET_NETWORK_ERROR,
+  payload: {
+    status,
+  },
+});
+
 export const initialiseStore = (dispatch) => {
   const token = localStorage.getItem('authToken');
 
