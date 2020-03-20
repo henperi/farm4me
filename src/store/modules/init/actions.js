@@ -1,4 +1,4 @@
-
+/* eslint-disable import/no-cycle */
 import types from './types';
 import { setAuthUser } from '../auth/actions';
 

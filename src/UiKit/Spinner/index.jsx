@@ -7,7 +7,7 @@ export const Spinner = ({ center, text }) => (
     className={center ? 'row row__mainAxis--center row__crossAxis--center' : ''}
     style={{ height: center ? 'inherit' : 'none' }}
   >
-    <span className="spinner margin__horizontal--5" />
+    <span className="spinner" />
     <span>{text}</span>
   </span>
 );

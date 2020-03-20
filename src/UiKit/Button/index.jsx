@@ -30,6 +30,7 @@ const fullWidth = css`
 
 export const StyledButton = styled.button.attrs((props) => ({
   type: getButtonType(props),
+  ...props,
 }))`
   outline: none;
   border: none;
@@ -38,6 +39,11 @@ export const StyledButton = styled.button.attrs((props) => ({
   font-weight: bolder;
   padding: 10px 28px;
   font-family: 'Open Sans', sans-serif;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 
   transition: all 300ms ease-in-out;
   margin-right: 5px;
@@ -78,6 +84,7 @@ Button.propTypes = {
   fullWidth: PropsType.bool,
   children: PropsType.node,
   onClick: PropsType.func,
+  disabled: PropsType.bool,
 };
 
 Button.defaultProps = {
@@ -88,4 +95,5 @@ Button.defaultProps = {
   size: 'md',
   children: <Fragment />,
   onClick: () => null,
+  disabled: false,
 };

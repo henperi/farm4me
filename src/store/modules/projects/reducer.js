@@ -30,8 +30,8 @@ export const projectReducer = (state = projectsInitialState, action) => {
   switch (action.type) {
     case types.ADD_PROJECT:
       return [
-        ...state,
         action.payload.project,
+        ...state,
       ];
 
     case types.SET_PROJECTS:

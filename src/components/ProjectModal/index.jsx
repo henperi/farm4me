@@ -9,6 +9,7 @@ import { CropCard } from '../CropCard';
 import { TextField } from '../../UiKit/TextField';
 import { moneyFormat } from '../../helpers/moneyFormat';
 import { Button } from '../../UiKit/Button';
+import { Spinner } from '../../UiKit/Spinner';
 
 /**
  * The Projects
@@ -18,13 +19,13 @@ import { Button } from '../../UiKit/Button';
 export function ProjectModal(props) {
   const {
     showModal,
-    setShowModal,
     onSubmit,
     onSelect,
     selectedCrop,
     handleInputChange,
     noOfHectares,
     onClose,
+    isSubmitting,
   } = props;
   return (
     <Modal width="50%" smWidth="98%" isVisible={showModal} onClose={onClose}>
@@ -88,7 +89,10 @@ export function ProjectModal(props) {
                 </div>
                 <SizedBox height={10} />
                 <div className="row row__mainAxis--center">
-                  <Button type="submit">Proceed</Button>
+                  <Button type="submit" className="row row__crossAxis--center" disabled={isSubmitting}>
+                    Proceed
+                    {isSubmitting && <Spinner />}
+                  </Button>
                 </div>
               </div>
             </SizedBox>

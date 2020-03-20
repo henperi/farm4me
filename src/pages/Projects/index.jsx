@@ -28,6 +28,8 @@ export function Project() {
   const [selectedCrop, setSelectedCrop] = useState(null);
   const [noOfHectares, setNoOfHectares] = useState(0);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [createdProject, setCreatedProject] = useState(null);
 
@@ -52,6 +54,7 @@ export function Project() {
     setSelectedCrop(null);
     setShowModal(false);
     setNoOfHectares(0);
+    setIsSubmitting(false);
   };
 
   const onSubmit = async (event) => {
@@ -63,6 +66,9 @@ export function Project() {
     }
 
     const investmentId = selectedCrop.id;
+    setIsSubmitting(true);
+    // return;
+
 
     /**
      * @type {import('../../store/modules/projects/actions').Project} project
@@ -80,7 +86,7 @@ export function Project() {
       onClose();
     }
 
-    return null;
+    return setIsSubmitting(false);
   };
 
   useEffect(() => {
@@ -104,6 +110,7 @@ export function Project() {
         handleInputChange={handleInputChange}
         noOfHectares={noOfHectares}
         onClose={() => onClose()}
+        isSubmitting={isSubmitting}
       />
       {createdProject && (
       <ProjectPaymentModal

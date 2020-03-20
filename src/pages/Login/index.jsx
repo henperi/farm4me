@@ -7,6 +7,7 @@ import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
 import { useGlobalStore } from '../../store';
 import { login } from '../../store/modules/auth/actions';
+import { Spinner } from '../../UiKit/Spinner';
 
 /**
  * The Login Page
@@ -21,9 +22,15 @@ export function LoginPage() {
     password: '',
   });
 
-  const onSubmit = (event) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (event) => {
+    setIsSubmitting(true);
     event.preventDefault();
-    return dispatch(login(signinData));
+
+    await dispatch(login(signinData));
+
+    return setIsSubmitting(false);
   };
 
 
@@ -67,8 +74,9 @@ export function LoginPage() {
             onChange={(e) => setSigninData({ ...signinData, password: e.target.value })}
           />
 
-          <Button type="submit" color="accent">
+          <Button type="submit" color="accent" className="row row__crossAxis--center">
             Login
+            {isSubmitting && <Spinner />}
           </Button>
         </form>
         <SizedBox height={25} />

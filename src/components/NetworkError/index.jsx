@@ -5,10 +5,16 @@ import { Button } from '../../UiKit/Button';
 import { useGlobalStore } from '../../store';
 import { setNetworkError } from '../../store/modules/init/actions';
 import { Text } from '../../UiKit/Text';
+import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
+
+// ScreenSizes
 
 export const StyledNetworkError = styled.div.attrs(() => ({}))`
+  min-width: 40%;
+  max-width: 40%;
   height: fit-content;
   top: 20px;
+  right: 10px;
   position: fixed;
   z-index: 101;
   display: flex;
@@ -17,10 +23,16 @@ export const StyledNetworkError = styled.div.attrs(() => ({}))`
   background-color: #FF5353;
   margin: 5px;
 
+  @media screen and (max-width: ${ScreenSizes.sm}) {
+    min-width: unset;
+    max-width: unset;
+    right: unset;
+  }
+
   .close {
-    position: fixed;
-    top: 0;
-    right: 0;
+    position: absolute;
+    top: -20px;
+    right: 2%;
     margin: 5px;
     height: 30px;
     width: 30px;
@@ -42,21 +54,24 @@ export function NetworkError(props) {
   const { state, dispatch } = useGlobalStore();
 
   return state.app.noNetwork ? (
-    <StyledNetworkError
-      className={`row__mainAxis--spaceBetween row__crossAxis--center ${className}`}
-    >
-      <Text color="#ffffff">
-        A network error occured, please check to make sure you have network before tring again
-      </Text>
-      <Button
-        type="button"
-        color="primary"
-        className="close"
-        onClick={() => dispatch(setNetworkError(false))}
+    <div className="row row__mainAxis--end">
+      <StyledNetworkError
+        className={`row__mainAxis--spaceBetween row__crossAxis--center ${className}`}
       >
-        x
-      </Button>
-    </StyledNetworkError>
+        <Text color="#ffffff">
+          A network error occured, please check to make sure you have network before tring again
+        </Text>
+        <Button
+          type="button"
+          color="primary"
+          className="close"
+          onClick={() => dispatch(setNetworkError(false))}
+        >
+          x
+        </Button>
+      </StyledNetworkError>
+
+    </div>
   ) : (
     <Fragment />
   );

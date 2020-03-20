@@ -7,6 +7,7 @@ import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
 import { useGlobalStore } from '../../store';
 import { signup } from '../../store/modules/auth/actions';
+import { Spinner } from '../../UiKit/Spinner';
 
 /**
  * The Signup Page
@@ -23,9 +24,14 @@ export function SignupPage() {
     phone: '',
   });
 
-  const onSubmit = (event) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (event) => {
+    setIsSubmitting(true);
     event.preventDefault();
-    return dispatch(signup(signUpData));
+    await dispatch(signup(signUpData));
+
+    return setIsSubmitting(false);
   };
 
   if (state.auth.isAuthenticated) {
@@ -93,8 +99,9 @@ export function SignupPage() {
             </label>
             <SizedBox height={20} />
 
-            <Button type="submit" color="accent">
+            <Button type="submit" color="accent" className="row row__crossAxis--center">
               Sign Up
+              {isSubmitting && <Spinner />}
             </Button>
           </div>
         </form>

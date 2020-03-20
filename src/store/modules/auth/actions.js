@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import JWT from 'jsonwebtoken';
 import types from './types';
 import httpService, { setAuthHeader, removeAuthHeader } from '../../../services/httpService';
@@ -71,7 +72,7 @@ export const login = (loginData) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/auth/login', loginData);
 
-    return dispatch(setAuthUser(data.token));
+    setTimeout(() => dispatch(setAuthUser(data.token)), 3000);
   } catch (error) {
     return axiosErrorHandler(error, dispatch);
   }
