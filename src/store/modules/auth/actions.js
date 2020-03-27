@@ -72,7 +72,7 @@ export const login = (loginData) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/auth/login', loginData);
 
-    setTimeout(() => dispatch(setAuthUser(data.token)), 3000);
+    return dispatch(setAuthUser(data.token));
   } catch (error) {
     return axiosErrorHandler(error, dispatch);
   }

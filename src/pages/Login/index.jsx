@@ -25,8 +25,8 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (event) => {
-    setIsSubmitting(true);
     event.preventDefault();
+    setIsSubmitting(true);
 
     await dispatch(login(signinData));
 

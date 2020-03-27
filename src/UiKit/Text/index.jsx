@@ -37,6 +37,11 @@ const getTextAlignment = (props) => {
         text-align: center;
       `;
 
+    case 'end':
+      return css`
+        text-align: end;
+      `;
+
     default:
       return css`
         text-align: left;

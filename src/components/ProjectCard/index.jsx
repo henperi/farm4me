@@ -6,6 +6,7 @@ import { SizedBox } from '../../UiKit/SizedBox';
 import { BgColors } from '../../UiKit/theme';
 import { ReactComponent as MoreVert } from '../../assets/more_verti.svg';
 import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
+import { AppProgressBar } from '../ProgressBar';
 
 // import { ReactComponent as PersonIcon } from '../../assets/person.svg';
 
@@ -27,17 +28,37 @@ const StyledProjectCard = styled.div`
 
   ${(props) => props.only && css`
     @media screen and (max-width: ${ScreenSizes.sm}) {
-      // width: 80%;
-      // margin-right: 3%;
+      /* width: 80%; */
+      /* margin-right: 3%; */
     }
   `}
 
   .icon--project {
-    width:36px;
-    height:36px;
+    width: 36px;
+    height: 36px;
     border-radius: 12px;
-    background-color:rgba(235.0000011920929, 240.00000089406967, 254.00000005960464, 0.55);
+    background-color: rgba(235.0000011920929, 240.00000089406967, 254.00000005960464, 0.55);
     margin-right: 5px;
+  }
+
+  .progressbar {
+    background-color: #fff;
+    width: 100%;
+    height: 8px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      position: absolute;
+      content: "";
+      background-color: #A9AFF0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 20%;
+      border-radius: 12px;
+    }
   }
 
   .icon--click {
@@ -65,6 +86,24 @@ export function ProjectCard(props) {
   const createdAt = new Date(farmProject.createdAt).toDateString();
   const startedAt = farmProject.startDate ? new Date(farmProject.startDate).toDateString() : 'Not yet stated';
   const endedAt = farmProject.endDate ? new Date(farmProject.endDate).toDateString() : '';
+
+  const getPercent = () => {
+    const today = Date.now();
+    const secondsInADay = (60 * 60 * 24);
+
+    if (farmProject.startDate && farmProject.endDate) {
+      const constDiff = (farmProject.endDate - farmProject.startDate) / 1000 / secondsInADay;
+      const timeDiff = (farmProject.endDate - today) / 1000 / secondsInADay;
+
+      if (new Date(today) >= new Date(farmProject.endDate)) {
+        return `${100}%`;
+      }
+
+      return `${Math.floor(((constDiff - timeDiff) / constDiff) * 100)}%`;
+    }
+    return `${0}%`;
+  };
+
   return (
     <StyledProjectCard {...props} className="col">
 
@@ -108,6 +147,11 @@ export function ProjectCard(props) {
           {endedAt}
         </Text>
         )}
+      <SizedBox height={10} />
+      <AppProgressBar percent={getPercent()} />
+      <Text size={12} className="row row__mainAxis--start" color="white">
+        {farmProject.isPaid ? 'Project Started' : 'Make payment to start project'}
+      </Text>
       <SizedBox height={10} />
       <div className="row row__mainAxis--center">
         <Button color="lightGrey">View</Button>
