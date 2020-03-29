@@ -16,6 +16,7 @@ import { toaster } from '../../helpers/toaster';
 import { ProjectCard } from '../../components/ProjectCard';
 import { ProjectModal } from '../../components/ProjectModal';
 import { ProjectPaymentModal } from '../../components/ProjectPaymentModal';
+import { Spinner } from '../../UiKit/Spinner';
 
 /**
  * The Projects
@@ -32,6 +33,8 @@ export function Project() {
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [createdProject, setCreatedProject] = useState(null);
+
+  const [isFetching, setIsFetching] = useState(true);
 
   const handleInputChange = (event) => {
     if (!event.target.value) {
@@ -92,10 +95,23 @@ export function Project() {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchProjects());
+      setIsFetching(false);
     };
 
     fetchData();
   }, [dispatch]);
+
+  const renderProjects = () => (state.projects.length > 0 ? (
+    <Scrollable>
+      {state.projects.map((project) => (
+        <ProjectCard
+          key={project.id}
+          project={project}
+          only={state.projects.length === 1}
+        />
+      ))}
+    </Scrollable>
+  ) : (<Text size={16}>You have no farming projects at the moment</Text>));
 
 
   return (
@@ -120,7 +136,12 @@ export function Project() {
       />
       )}
       <div className="dashboard--main">
-        <Button className="floatingAction--button">
+        <Button
+          className="floatingAction--button"
+          onClick={() => {
+            setShowModal(true);
+          }}
+        >
           <AddProjectIcon />
         </Button>
         <Text color="#333539" size={20} weight="bold">
@@ -162,19 +183,14 @@ export function Project() {
             </Button>
           </div>
           <SizedBox height={10} />
-          {
-            state.projects.length > 0 ? (
-              <Scrollable>
-                {state.projects.map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    only={state.projects.length === 1}
-                  />
-                ))}
-              </Scrollable>
-            ) : (<Text size={16}>You have no farming projects at the moment</Text>)
-          }
+          <SizedBox width="100%" smWidth="100%" height={250}>
+            {
+            isFetching ? (
+              <Spinner center size={50} text="fetching your projects..." />) : (
+              renderProjects()
+            )
+              }
+          </SizedBox>
         </div>
       </div>
     </main>

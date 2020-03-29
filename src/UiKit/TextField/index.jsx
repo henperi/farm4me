@@ -76,6 +76,7 @@ TextField.propTypes = {
   onChange: PropsType.func,
   rows: PropsType.number,
   min: PropsType.oneOfType([PropsType.string, PropsType.number]),
+  disabled: PropsType.bool,
 };
 
 TextField.defaultProps = {
@@ -92,4 +93,5 @@ TextField.defaultProps = {
   rows: 5,
   as: null,
   value: undefined,
+  disabled: false,
 };

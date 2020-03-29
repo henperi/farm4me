@@ -2,6 +2,7 @@ import { types } from './types';
 import httpService from '../../../services/httpService';
 
 import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
+import { flashToaster, addToaster } from '../toaster/actions';
 
 /**
  * @typedef {import('./reducer').Project} Project
@@ -61,6 +62,8 @@ export const createProject = (createProjectData) => async (dispatch) => {
     } = await httpService.post('/project', createProjectData);
 
     dispatch(addOneProject(data.project));
+
+    dispatch(flashToaster({ message: `You created a new ${data.project.name} Investment` }));
     return data.project;
   } catch (error) {
     return axiosErrorHandler(error, dispatch);
@@ -83,6 +86,8 @@ export const startProject = (startProjectData) => async (dispatch) => {
     } = await httpService.post(`/project/start/${transactionRef}`, startProjectData);
 
     dispatch(updateOneProject(data.updatedProject));
+
+    dispatch(addToaster({ message: `Your ${data.updatedProject.name} Investment has been started` }));
     return data.project;
   } catch (error) {
     return axiosErrorHandler(error, dispatch);

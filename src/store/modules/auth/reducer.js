@@ -4,6 +4,7 @@ export const authInitialState = {
   isAuthenticated: false,
   user: {
     firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     id: '',

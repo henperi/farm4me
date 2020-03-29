@@ -18,6 +18,8 @@ import { AppProgressBar } from '../ProgressBar';
 export function Sidebar() {
   const { dispatch } = useGlobalStore();
 
+  const completion = 25;
+
   return (
     <div className="sidebar">
       <NavLink to="/dashboard" className="sidebar--link" activeClassName="sidebar--link--active">
@@ -41,7 +43,7 @@ export function Sidebar() {
 
       <div className="logout col hidden-sm-down">
         <NavLink to="/profile" className="profile--progress hidden-sm-down">
-          <AppProgressBar percent="20%" />
+          <AppProgressBar percent={`${completion}%`} />
           <Text size={12} className="" color="white">Your profile is incomplete</Text>
         </NavLink>
 

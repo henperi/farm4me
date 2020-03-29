@@ -10,18 +10,13 @@ import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
 // ScreenSizes
 
 export const StyledNetworkError = styled.div.attrs(() => ({}))`
-  min-width: 40%;
-  max-width: 40%;
+  min-width: 80%;
   height: fit-content;
-  top: 20px;
-  right: 10px;
-  position: fixed;
-  z-index: 101;
-  display: flex;
   border-radius: 15px;
-  padding: 10px 2%;
+  padding: 10px 5%;
   background-color: #FF5353;
-  margin: 5px;
+  margin-top: 20px;
+  position: relative;
 
   @media screen and (max-width: ${ScreenSizes.sm}) {
     min-width: unset;

@@ -8,8 +8,8 @@ import { LoginPage } from '../pages/Login';
 import { Dashboard } from '../pages/Dashboard';
 import { Project } from '../pages/Projects';
 import { Profile } from '../pages/Profile';
-import { NetworkError } from '../components/NetworkError';
 import { ProtectedRoute } from '../components/ProtectedRoute';
+import { Toaster } from '../components/Toaster/ index';
 
 /**
  * App Routing Component
@@ -19,7 +19,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 export function Routes() {
   return (
     <BrowserRouter>
-      <NetworkError />
+      <Toaster />
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
         <Route exact path="/signup" component={SignupPage} />
