@@ -16,9 +16,9 @@ import { AppProgressBar } from '../ProgressBar';
  * @returns {JSX.Element} Sidebar
  */
 export function Sidebar() {
-  const { dispatch } = useGlobalStore();
+  const { state, dispatch } = useGlobalStore();
 
-  const completion = 25;
+  const { percentageComplete } = state.profile;
 
   return (
     <div className="sidebar">
@@ -43,8 +43,8 @@ export function Sidebar() {
 
       <div className="logout col hidden-sm-down">
         <NavLink to="/profile" className="profile--progress hidden-sm-down">
-          <AppProgressBar percent={`${completion}%`} />
-          <Text size={12} className="" color="white">Your profile is incomplete</Text>
+          <AppProgressBar percent={`${percentageComplete}%`} />
+          <Text size={12} className="" color="white">{percentageComplete < 100 ? 'Your profile is incomplete' : 'Your profile is complete'}</Text>
         </NavLink>
 
         <NavLink onClick={() => dispatch(removeAuthUser())} to="/login" className="sidebar--link" activeClassName="sidebar--link--active">

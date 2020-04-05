@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { Button } from '../../UiKit/Button';
 import { Text } from '../../UiKit/Text';
 import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
-import { BgColors } from '../../UiKit/theme';
 import { NetworkError } from '../NetworkError';
 import { useGlobalStore } from '../../store';
 import { removeToaster } from '../../store/modules/toaster/actions';
+import { getBgColor } from '../../UiKit/uiHelper/getBgColor';
 
 
 export const StyledToastContainer = styled.div.attrs(() => ({}))`
@@ -37,10 +37,11 @@ export const StyledToaster = styled.div.attrs(() => ({}))`
   height: fit-content;
   border-radius: 15px;
   padding: 25px 5%;
-  background-color: ${BgColors.primary};
   margin-top: 20px;
   position: relative;
   transition: 4s ease-in-out all;
+  
+  ${(props) => getBgColor(props)}
 
   @media screen and (max-width: ${ScreenSizes.sm}) {
   }
@@ -80,6 +81,7 @@ export function Toaster(props) {
             <StyledToaster
               className={`row__mainAxis--spaceBetween row__crossAxis--center ${className}`}
               key={toast.id}
+              color={toast.type}
             >
               <Text color="#ffffff" size={18}>{toast.message}</Text>
               <Button

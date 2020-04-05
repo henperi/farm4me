@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import PropsType from 'prop-types';
 
 import { TextColor } from '../theme';
+import { Text } from '../Text';
 
 export const Input = styled.input.attrs((props) => ({
   type: props.type,
@@ -11,7 +12,7 @@ export const Input = styled.input.attrs((props) => ({
   outline: none;
   color: ${TextColor.default};
   border: unset;
-  background-color: unset;
+  background-color: transparent;
   font-size: 16px;
   flex: 3;
   margin: auto 2%;
@@ -20,16 +21,25 @@ export const Input = styled.input.attrs((props) => ({
 
 Input.defaultProps = {};
 
+const TextFieldContainer = styled.div`
+  margin: 15px 0;
+`;
+
 export const StyledTextField = styled.div.attrs((props) => ({
   className: props.className,
 }))`
   background-color: ${(props) => (props.color)};
   border-radius: 12px;
-  margin: 10px 0;
 
   ${(props) => props.color
     && css`
       background-color: ${props.color};
+    `};
+
+  ${(props) => props.hasError
+    && css`
+      border: 2px solid #ff3e3ea6;
+      /* box-shadow: inset 1px 1px 0px #ff3e3ea6; */
     `};
 
   .icon {
@@ -49,16 +59,19 @@ export const StyledTextField = styled.div.attrs((props) => ({
 
 export const TextField = (props) => {
   const {
-    leftIcon, rightIcon, color, ...inputProps
+    leftIcon, rightIcon, color, error, errorColor, ...inputProps
   } = props;
 
   return (
-    <StyledTextField color={color} className="row row__mainAxis--spaceBetween">
-      {leftIcon && <div className="icon">{leftIcon}</div>}
-      <Input {...inputProps} />
+    <TextFieldContainer>
+      <StyledTextField color={color} hasError={!!error} className="row row__mainAxis--spaceBetween">
+        {leftIcon && <div className="icon">{leftIcon}</div>}
+        <Input {...inputProps} />
 
-      {rightIcon && <div className="icon">{rightIcon}</div>}
-    </StyledTextField>
+        {rightIcon && <div className="icon">{rightIcon}</div>}
+      </StyledTextField>
+      {error && <Text color={errorColor} size={12}>{error}</Text>}
+    </TextFieldContainer>
   );
 };
 
@@ -77,6 +90,9 @@ TextField.propTypes = {
   rows: PropsType.number,
   min: PropsType.oneOfType([PropsType.string, PropsType.number]),
   disabled: PropsType.bool,
+  error: PropsType.string,
+  name: PropsType.string,
+  errorColor: PropsType.string,
 };
 
 TextField.defaultProps = {
@@ -94,4 +110,7 @@ TextField.defaultProps = {
   as: null,
   value: undefined,
   disabled: false,
+  error: '',
+  name: '',
+  errorColor: 'error',
 };

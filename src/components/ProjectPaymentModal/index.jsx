@@ -10,6 +10,7 @@ import { useGlobalStore } from '../../store';
 import { toKobo } from '../../helpers/toKobo';
 import { startProject } from '../../store/modules/projects/actions';
 import { config } from '../../config';
+import { flashToaster } from '../../store/modules/toaster/actions';
 
 /**
  * The Projects
@@ -30,6 +31,7 @@ export function ProjectPaymentModal(props) {
       dispatch(startProject({
         transactionRef: response.reference,
       }));
+      dispatch(flashToaster({ message: 'We are being notified and your project will start as soon as this payment is verified', type: 'lightGrey' }));
 
       return setShowModal(false);
     }
@@ -43,24 +45,15 @@ export function ProjectPaymentModal(props) {
   return (
     <Modal width="50%" smWidth="98%" isVisible={showModal} onClose={() => setShowModal(false)}>
       <div className="col col__crossAxis--center">
-        <Text
-          color="#333539"
-          alignment="center"
-          size={18}
-          weight="bold"
-          className="padding__top--20"
-        >
-          Project created
-        </Text>
         <SizedBox height={20} />
         <Text
           color="#333539"
           alignment="center"
-          size={18}
+          size={20}
           weight="bold"
           className="padding__top--20"
         >
-          An invoice has been generated and sent to your email
+          New Farming Project Created, An invoice has been generated and sent to your email
         </Text>
         <SizedBox height={25} />
         <Text color="#333539" size={20} weight="bold">
@@ -80,27 +73,27 @@ export function ProjectPaymentModal(props) {
             </Text>
           </div>
           <div className="row row__mainAxis--spaceBetween">
-            <Text color="#333539" size={14}>
+            <Text color="#333539" size={16}>
               Number of Hectares
             </Text>
-            <Text color="#333539" size={14}>
+            <Text color="#333539" size={16}>
               {createdProject.numberOfHecters}
               {' '}
               hectres
             </Text>
           </div>
           <div className="row row__mainAxis--spaceBetween">
-            <Text color="#333539" size={14}>
+            <Text color="#333539" size={16}>
               Total
             </Text>
-            <Text color="#333539" size={14}>
+            <Text color="#333539" size={16}>
               {moneyFormat(createdProject.totalCost)}
             </Text>
           </div>
         </SizedBox>
 
         <SizedBox height={25} />
-        <Text color="#333539" size={16}>
+        <Text color="#333539" size={18}>
           Make Payment to start this project right
         </Text>
         <SizedBox height={5} />

@@ -6,7 +6,7 @@ import { types } from './types';
   *  id?: string;
   *  message: string;
   *  timeOut?: number;
-  *  type?: string;
+  *  type?: 'primary' | 'accent' | 'grey' | 'lightGrey' | 'error' | 'success';
   * }} ToastData
   */
 
@@ -15,14 +15,9 @@ import { types } from './types';
   * type: string;
   * payload: {
     * toastId?: string;
-    * toastData: {
-      * id: string;
-      * message: string;
-      * timeOut: number;
-      * type: string;
-    * };
+    * toastData: ToastData;
   * };
- * }} FlashReturns
+ * }} FlashAction
  */
 
 /**
@@ -40,7 +35,7 @@ export const removeToaster = (toastId) => ({
 /**
  * @description Method to add one toast message to the store
  * @param {ToastData} toastData
- * @returns {Function | FlashReturns} result
+ * @returns {Function | FlashAction} result
  */
 export const flashToaster = ({
   message, timeOut = 12000, type = 'success', id = shortId.generate(),

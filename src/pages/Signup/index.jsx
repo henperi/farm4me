@@ -8,6 +8,7 @@ import { SizedBox } from '../../UiKit/SizedBox';
 import { useGlobalStore } from '../../store';
 import { signup } from '../../store/modules/auth/actions';
 import { Spinner } from '../../UiKit/Spinner';
+import { flashToaster } from '../../store/modules/toaster/actions';
 
 /**
  * The Signup Page
@@ -17,6 +18,13 @@ import { Spinner } from '../../UiKit/Spinner';
 export function SignupPage() {
   const { dispatch, state } = useGlobalStore();
 
+  const defaultState = {
+    email: '',
+    password: '',
+    firstName: '',
+    phone: '',
+  };
+
   const [signUpData, setSignUpData] = useState({
     email: '',
     password: '',
@@ -24,12 +32,36 @@ export function SignupPage() {
     phone: '',
   });
 
+  const [formErrors, setformErrors] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    phone: '',
+  });
+
+  // const [mainError, setmainError] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (event) => {
     setIsSubmitting(true);
     event.preventDefault();
-    await dispatch(signup(signUpData));
+    setformErrors(defaultState);
+    // setmainError('');
+
+    /** @type {any} */
+    const response = await dispatch(signup(signUpData));
+
+    if (response && response.statusCode > 300) {
+      if (response.errors && response.errors.detailsObject) {
+        setformErrors({
+          ...formErrors,
+          ...response.errors.detailsObject,
+        });
+      } else if (response.message) {
+        dispatch(flashToaster({ message: response.message, timeOut: 6000, type: 'error' }));
+      }
+    }
 
     return setIsSubmitting(false);
   };
@@ -62,7 +94,10 @@ export function SignupPage() {
           <TextField
             className="margin__bottom--50"
             type="text"
-            placeholder="First Name"
+            placeholder="Full Name"
+            name="firstName"
+            error={formErrors.firstName}
+            errorColor="white"
             leftIcon="A"
             required
             onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })}
@@ -71,6 +106,9 @@ export function SignupPage() {
             className="margin__bottom--50"
             type="text"
             placeholder="Phone Number"
+            name="phoneNumber"
+            error={formErrors.phone}
+            errorColor="white"
             leftIcon="A"
             required
             onChange={(e) => setSignUpData({ ...signUpData, phone: e.target.value })}
@@ -79,6 +117,9 @@ export function SignupPage() {
             required
             type="text"
             placeholder="Email"
+            name="email"
+            error={formErrors.email}
+            errorColor="white"
             leftIcon="A"
             onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
           />
@@ -86,6 +127,9 @@ export function SignupPage() {
             required
             type="password"
             placeholder="Password"
+            name="password"
+            error={formErrors.password}
+            errorColor="white"
             leftIcon="A"
             onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
           />

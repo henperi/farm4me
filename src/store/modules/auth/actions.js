@@ -3,6 +3,7 @@ import JWT from 'jsonwebtoken';
 import types from './types';
 import httpService, { setAuthHeader, removeAuthHeader } from '../../../services/httpService';
 import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
+import { flashToaster } from '../toaster/actions';
 
 /**
  * @description method to set the auth user
@@ -51,8 +52,12 @@ export const signup = (signupData) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/auth/signup', signupData);
 
+    dispatch(flashToaster({ message: 'Your account has been created successfully', type: 'success' }));
     return dispatch(setAuthUser(data.token));
   } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };
@@ -64,16 +69,23 @@ export const signup = (signupData) => async (dispatch) => {
  *  password: string,
  * }} LoginData
  * @param {LoginData} loginData
- * @returns {Function} dispatch an action
+ * @param {Function} setIsSubmitting
+ * @returns {any} dispatch an action
  */
-export const login = (loginData) => async (dispatch) => {
+export const login = (loginData, setIsSubmitting = () => null) => async (dispatch) => {
   try {
     const {
       data: { data },
     } = await httpService.post('/auth/login', loginData);
+    setIsSubmitting(false);
 
+    dispatch(flashToaster({ message: 'Login successful', type: 'success' }));
     return dispatch(setAuthUser(data.token));
   } catch (error) {
+    setIsSubmitting(false);
+    if (error.response) {
+      return error.response.data;
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };

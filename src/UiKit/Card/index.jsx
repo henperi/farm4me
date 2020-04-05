@@ -8,12 +8,11 @@ import { getBgColor } from '../uiHelper/getBgColor';
 
 export const StyledCard = styled.div.attrs(() => ({}))`
   padding: 30px 35px;
-  min-height: 50px;
+  min-height: 10px;
   height: fit-content;
   border-radius: 20px;
   margin-bottom: 10px;
-  margin-top: 10px;
-
+  
   @media screen and (max-width: ${ScreenSizes.sm}) {
     padding: 30px 15px;
   }
@@ -22,7 +21,7 @@ export const StyledCard = styled.div.attrs(() => ({}))`
 
   ${(props) => props.elevated
     && css`
-      box-shadow: 0px 10px 50px 1px rgba(49, 56, 78, 0.08);
+      box-shadow: 0px 4px 4px rgba(214.62499290704727, 214.62499290704727, 214.62499290704727, 0.25);
     `}
   ${(props) => props.padding
     && css`

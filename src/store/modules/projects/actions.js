@@ -2,7 +2,7 @@ import { types } from './types';
 import httpService from '../../../services/httpService';
 
 import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
-import { flashToaster, addToaster } from '../toaster/actions';
+import { flashToaster } from '../toaster/actions';
 
 /**
  * @typedef {import('./reducer').Project} Project
@@ -66,6 +66,9 @@ export const createProject = (createProjectData) => async (dispatch) => {
     dispatch(flashToaster({ message: `You created a new ${data.project.name} Investment` }));
     return data.project;
   } catch (error) {
+    if (error.response) {
+      return dispatch(flashToaster({ message: error.response.data.message, type: 'error' }));
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };
@@ -74,8 +77,8 @@ export const createProject = (createProjectData) => async (dispatch) => {
  * @description A thunk action to register a new customer
  * @typedef {{
  *  transactionRef: string,
- * }} startProject
- * @param {startProject} startProjectData
+ * }} StartProject
+ * @param {StartProject} startProjectData
  * @returns {Function | Project} dispatch an action
  */
 export const startProject = (startProjectData) => async (dispatch) => {
@@ -87,9 +90,22 @@ export const startProject = (startProjectData) => async (dispatch) => {
 
     dispatch(updateOneProject(data.updatedProject));
 
-    dispatch(addToaster({ message: `Your ${data.updatedProject.name} Investment has been started` }));
+    dispatch(
+      flashToaster({
+        message: `Your ${data.updatedProject.name} Investment has been started`,
+        type: 'success',
+      }),
+    );
     return data.project;
   } catch (error) {
+    /*
+      Send an email to admin telling them that the process of starting this project failed,
+      TransactionRef:${transactionRef}.
+    */
+
+    if (error.response) {
+      return dispatch(flashToaster({ message: error.response.data.message, type: 'error' }));
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };

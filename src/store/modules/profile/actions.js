@@ -71,10 +71,13 @@ export const addBankInfo = (bankInfo) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/profile/add-bank', bankInfo);
 
-    dispatch(flashToaster({ message: 'bank information added successfully' }));
+    dispatch(flashToaster({ message: 'Bank information added successfully', type: 'success' }));
 
     return dispatch(setProfile(data.profile));
   } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };
@@ -95,10 +98,13 @@ export const addAddressInfo = (addressInfo) => async (dispatch) => {
       data: { data },
     } = await httpService.post('/profile/add-address', addressInfo);
 
-    dispatch(flashToaster({ message: 'Address information added successfully' }));
+    dispatch(flashToaster({ message: 'Address information added successfully', type: 'success' }));
 
     return dispatch(setProfile(data.profile));
   } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
     return axiosErrorHandler(error, dispatch);
   }
 };
@@ -117,7 +123,7 @@ export const addDocsInfo = (docsInfo) => async (dispatch) => {
     const {
       data: { data },
     } = await httpService.post('/profile/add-docs', docsInfo);
-    dispatch(flashToaster({ message: 'Doccument information added successfully' }));
+    dispatch(flashToaster({ message: 'Doccument information added successfully', type: 'success' }));
 
     return dispatch(setProfile(data.profile));
   } catch (error) {

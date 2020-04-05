@@ -1,13 +1,6 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
-
-const TextColors = {
-  default: '#757994',
-  primary: '#747be5',
-  accent: '#2655ee',
-  secondary: '',
-  white: '#fff',
-};
+import { getTextColor } from '../uiHelper/getTextColor';
 
 const getTextType = (props) => {
   const { type } = props;
@@ -65,18 +58,6 @@ const getFontWeight = (props) => {
   }
 };
 
-const getTextColor = (color) => {
-  if (Object.keys(TextColors).includes(color)) {
-    return TextColors[color];
-  }
-
-  if (/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
-    return color;
-  }
-
-  return TextColors.default;
-};
-
 const getTextSize = (props) => {
   const { size } = props;
 
@@ -93,7 +74,7 @@ const getTextSize = (props) => {
 };
 
 const StyledText = styled.span.attrs(() => ({}))`
-  color: ${(props) => getTextColor(props.color)};
+  ${(props) => getTextColor(props)};
   font-weight: lighter;
   font-family: 'Open Sans', sans-serif;
   ${(props) => getTextType(props)}

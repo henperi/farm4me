@@ -8,6 +8,7 @@ import { SizedBox } from '../../UiKit/SizedBox';
 import { useGlobalStore } from '../../store';
 import { login } from '../../store/modules/auth/actions';
 import { Spinner } from '../../UiKit/Spinner';
+import { flashToaster } from '../../store/modules/toaster/actions';
 
 /**
  * The Login Page
@@ -17,20 +18,46 @@ import { Spinner } from '../../UiKit/Spinner';
 export function LoginPage() {
   const { dispatch, state } = useGlobalStore();
 
+  const defaultState = {
+    email: '',
+    password: '',
+  };
+
   const [signinData, setSigninData] = useState({
     email: '',
     password: '',
   });
+
+  const [formErrors, setformErrors] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [mainError, setmainError] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
+    setformErrors(defaultState);
+    setmainError('');
 
-    await dispatch(login(signinData));
+    /** @type {any} */
+    const response = await dispatch(login(signinData, setIsSubmitting));
 
-    return setIsSubmitting(false);
+    if (response && response.statusCode > 300) {
+      if (response.errors && response.errors.detailsObject) {
+        setformErrors({
+          ...formErrors,
+          ...response.errors.detailsObject,
+        });
+      } else if (response.message) {
+        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+      }
+    }
+
+    return null;
   };
 
 
@@ -59,11 +86,20 @@ export function LoginPage() {
         </Text>
         <SizedBox height={50} />
         <form onSubmit={onSubmit}>
+          {
+            mainError && (
+            <Text color="white" weight="bold">
+              {mainError}
+            </Text>
+            )
+          }
           <TextField
             required
             type="text"
             placeholder="Email"
             leftIcon="A"
+            error={formErrors.email}
+            errorColor="white"
             onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
           />
           <TextField
@@ -71,10 +107,12 @@ export function LoginPage() {
             type="password"
             placeholder="Password"
             leftIcon="A"
+            error={formErrors.password}
+            errorColor="white"
             onChange={(e) => setSigninData({ ...signinData, password: e.target.value })}
           />
 
-          <Button type="submit" color="accent" className="row row__crossAxis--center">
+          <Button type="submit" color="accent" className="row row__crossAxis--center" disabled={isSubmitting}>
             Login
             {isSubmitting && <Spinner />}
           </Button>

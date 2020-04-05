@@ -8,6 +8,7 @@ import { Sidebar } from '../../components/Sidebar';
 import { useGlobalStore } from '../../store';
 import { fetchProfile, addBankInfo, addAddressInfo } from '../../store/modules/profile/actions';
 import { Spinner } from '../../UiKit/Spinner';
+import { flashToaster } from '../../store/modules/toaster/actions';
 
 /**
  * The Projects
@@ -28,19 +29,35 @@ export function Profile() {
     addressLine1: '',
   });
 
+  const [addressFormErrors, setaddressFormErrors] = useState({
+    city: '',
+    state: '',
+    addressLine1: '',
+  });
+
+  const [bankFormErrors, setbankFormErrors] = useState({
+    bankName: '',
+    accountName: '',
+    accountNumber: '',
+  });
+
   const [isFetching, setIsFetching] = useState(true);
   const [isSubmittingBankInfo, setIsSubmittingBankInfo] = useState(false);
   const [isSubmittingAddressInfo, setIsSubmittingAddressInfo] = useState(false);
 
+
   useEffect(() => {
     const fetchData = async () => {
-      await dispatch(fetchProfile());
+      if (state.profile.userId) {
+        return setIsFetching(false);
+      }
 
-      setIsFetching(false);
+      await dispatch(fetchProfile());
+      return null;
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, state.profile.userId]);
 
   const willDisable = (data) => {
     const vals = Object.values(data);
@@ -64,16 +81,51 @@ export function Profile() {
   const submitBankForm = async (event) => {
     setIsSubmittingBankInfo(true);
     event.preventDefault();
+    setbankFormErrors({
+      bankName: '',
+      accountName: '',
+      accountNumber: '',
+    });
 
-    await dispatch(addBankInfo(bankState));
+    /** @type {any} */
+    const response = await dispatch(addBankInfo(bankState));
+
+    if (response && response.statusCode > 300) {
+      if (response.errors && response.errors.detailsObject) {
+        setbankFormErrors({
+          ...bankFormErrors,
+          ...response.errors.detailsObject,
+        });
+      } else if (response.message) {
+        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+      }
+    }
+
     setIsSubmittingBankInfo(false);
   };
 
   const submitAddressForm = async (event) => {
     setIsSubmittingAddressInfo(true);
     event.preventDefault();
+    setaddressFormErrors({
+      city: '',
+      state: '',
+      addressLine1: '',
+    });
 
-    await dispatch(addAddressInfo(addressState));
+    /** @type {any} */
+    const response = await dispatch(addAddressInfo(addressState));
+
+    if (response && response.statusCode > 300) {
+      if (response.errors && response.errors.detailsObject) {
+        setaddressFormErrors({
+          ...addressFormErrors,
+          ...response.errors.detailsObject,
+        });
+      } else if (response.message) {
+        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+      }
+    }
     setIsSubmittingAddressInfo(false);
   };
 
@@ -144,13 +196,15 @@ export function Profile() {
                   color="#F6F9FD"
                   required
                   type="text"
-                  placeholder="Bank Name"
+                  name="accountName"
+                  error={bankFormErrors.accountName}
+                  placeholder="Account Name"
                   leftIcon="A"
                   onChange={(e) => setBankState({
                     ...bankState,
-                    bankName: e.target.value,
+                    accountName: e.target.value,
                   })}
-                  value={bankState.bankName}
+                  value={bankState.accountName}
                 />
               </SizedBox>
               <SizedBox width="48%" smWidth="100%">
@@ -158,6 +212,8 @@ export function Profile() {
                   color="#F6F9FD"
                   required
                   type="text"
+                  name="accountNumber"
+                  error={bankFormErrors.accountNumber}
                   placeholder="Account Number"
                   leftIcon="A"
                   onChange={(e) => setBankState({
@@ -173,13 +229,15 @@ export function Profile() {
                 color="#F6F9FD"
                 required
                 type="text"
-                placeholder="Name on Bank"
+                name="bankName"
+                error={bankFormErrors.bankName}
+                placeholder="Bank Name eg GTB"
                 leftIcon="A"
                 onChange={(e) => setBankState({
                   ...bankState,
-                  accountName: e.target.value,
+                  bankName: e.target.value,
                 })}
-                value={bankState.accountName}
+                value={bankState.bankName}
               />
             </SizedBox>
             <SizedBox height={10} />
@@ -201,6 +259,7 @@ export function Profile() {
                   required
                   type="text"
                   placeholder="City"
+                  error={addressFormErrors.city}
                   leftIcon="A"
                   onChange={(e) => setAddressState({
                     ...addressState,
@@ -215,6 +274,7 @@ export function Profile() {
                   required
                   type="text"
                   placeholder="State"
+                  error={addressFormErrors.state}
                   leftIcon="A"
                   onChange={(e) => setAddressState({
                     ...addressState,
@@ -232,6 +292,7 @@ export function Profile() {
                 required
                 type="text"
                 placeholder="Address line 1"
+                error={addressFormErrors.addressLine1}
                 leftIcon="A"
                 onChange={(e) => setAddressState({
                   ...addressState,

@@ -105,7 +105,7 @@ export function CropCard(props) {
           <Text color="accent">Money Back Guaranteed</Text>
         </div>
         <SizedBox height={10} />
-        <Button color={selectedId === id ? 'primary' : 'accent'} onClick={() => onSelect(id)}>
+        <Button type="button" color={selectedId === id ? 'primary' : 'accent'} onClick={() => onSelect(id)}>
           {selectedId === id ? 'Selected' : 'Select'}
         </Button>
       </div>

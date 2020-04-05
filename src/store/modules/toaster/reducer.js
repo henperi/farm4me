@@ -6,7 +6,7 @@ import { types } from './types';
 
 /**
  *
- * @typedef {import('./actions').FlashReturns} Action
+ * @typedef {import('./actions').FlashAction} Action
  */
 
 /**

@@ -2,6 +2,7 @@ import { types } from './types';
 
 export const profileInitialState = {
   userId: '',
+  percentageComplete: 25,
   bank: {
     bankName: '',
     accountName: '',
