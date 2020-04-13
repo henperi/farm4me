@@ -13,6 +13,8 @@ import { Divider } from '../../UiKit/Divider';
 import { fetchProfile } from '../../store/modules/profile/actions';
 import { Spinner } from '../../UiKit/Spinner';
 import { flashToaster } from '../../store/modules/toaster/actions';
+import { fetchUserStats } from '../../store/modules/userStats/actions';
+import { moneyFormat } from '../../helpers/moneyFormat';
 
 /**
  * The Dashboard
@@ -25,6 +27,10 @@ export function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (state.userStats.refetchTime < Date.now()) {
+        dispatch(fetchUserStats());
+      }
+
       // if there is a profile.userId, do not fetch the profile
       if (state.profile.userId) {
         if (state.profile.percentageComplete < 75) {
@@ -41,7 +47,9 @@ export function Dashboard() {
         return setIsFetching(false);
       }
 
-      return dispatch(fetchProfile());
+      return Promise.all([
+        dispatch(fetchProfile()),
+      ]);
     };
 
     fetchData();
@@ -50,12 +58,19 @@ export function Dashboard() {
     history,
     state.auth.user.firstName,
     state.profile.percentageComplete,
-    state.profile.userId,
+    state.profile.userId, state.userStats.refetchTime,
   ]);
+
+  // console.log(state);
+
+  const {
+    totalProjects, totalRunningProjects, totalCashInvested, totalCashAvailableForWithdrawal,
+  } = state.userStats;
 
   return (
     <main className="dashboard row">
       <Sidebar />
+
       {isFetching ? (
         <div className="dashboard--main">
           <Spinner center size={50} text="Gathering necessary information" />
@@ -103,7 +118,7 @@ export function Dashboard() {
                 </Card>
                 <div className="col col__crossAxis--end">
                   <Text size={12}>Total Projects</Text>
-                  <Text size={26}>0</Text>
+                  <Text size={26}>{totalProjects}</Text>
                 </div>
               </div>
               <div className="col">
@@ -118,7 +133,7 @@ export function Dashboard() {
                 </Card>
                 <div className="col col__crossAxis--end">
                   <Text size={12}>Total Cash Invested</Text>
-                  <Text size={26}>0</Text>
+                  <Text size={26}>{moneyFormat(totalCashInvested)}</Text>
                 </div>
               </div>
               <div className="col">
@@ -133,7 +148,7 @@ export function Dashboard() {
                 </Card>
                 <div className="col col__crossAxis--end">
                   <Text size={12}>Cash Available For Withdrawal</Text>
-                  <Text size={26}>0</Text>
+                  <Text size={26}>{moneyFormat(totalCashAvailableForWithdrawal)}</Text>
                 </div>
               </div>
               <div className="col">
@@ -148,7 +163,7 @@ export function Dashboard() {
                 </Card>
                 <div className="col col__crossAxis--end">
                   <Text size={12}>Running Projects</Text>
-                  <Text size={26}>0</Text>
+                  <Text size={26}>{totalRunningProjects}</Text>
                 </div>
               </div>
               <div className="col">

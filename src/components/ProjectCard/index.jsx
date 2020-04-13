@@ -1,12 +1,18 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Text } from '../../UiKit/Text';
-import { Button } from '../../UiKit/Button';
+// import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
 import { BgColors } from '../../UiKit/theme';
 import { ReactComponent as MoreVert } from '../../assets/more_verti.svg';
 import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
 import { AppProgressBar } from '../ProgressBar';
+import { PayStackButton } from '../PayStackButton';
+import { useGlobalStore } from '../../store';
+import { toKobo } from '../../helpers/toKobo';
+import { moneyFormat } from '../../helpers/moneyFormat';
+import { startProject } from '../../store/modules/projects/actions';
+import { flashToaster } from '../../store/modules/toaster/actions';
 
 // import { ReactComponent as PersonIcon } from '../../assets/person.svg';
 
@@ -78,6 +84,7 @@ const StyledProjectCard = styled.div`
  * @returns {JSX.Element} ProjectCard
  */
 export function ProjectCard(props) {
+  const { state, dispatch } = useGlobalStore();
   /**
    * @type {import('../../store/modules/projects/actions').Project} project
    */
@@ -104,6 +111,16 @@ export function ProjectCard(props) {
     return `${0}%`;
   };
 
+  const callback = (response) => {
+    if (response.status === 'success') {
+      dispatch(startProject({
+        transactionRef: response.reference,
+      }));
+      dispatch(flashToaster({ message: 'We are being notified and your project will start as soon as this payment is verified', type: 'lightGrey' }));
+    }
+    return null;
+  };
+
   return (
     <StyledProjectCard {...props} className="col">
 
@@ -122,7 +139,10 @@ export function ProjectCard(props) {
       <Text size={13} color="white">
         {farmProject.numberOfHecters}
         {' '}
-        hectares
+        hectares @
+        {' '}
+        N
+        {moneyFormat(farmProject.totalCost)}
       </Text>
       <Text size={13} color="white">{farmProject.isPaid ? 'Paid' : 'Not Paid'}</Text>
       {
@@ -154,7 +174,15 @@ export function ProjectCard(props) {
       </Text>
       <SizedBox height={10} />
       <div className="row row__mainAxis--center">
-        <Button color="lightGrey">View</Button>
+        {/* <Button color="lightGrey">View</Button> */}
+        <PayStackButton
+          email={state.auth.user.email}
+          amount={toKobo(farmProject.totalCost)}
+          reference={farmProject.reference}
+          callback={callback}
+          label={farmProject.isPaid ? 'Paid' : 'Pay'}
+          disabled={farmProject.isPaid}
+        />
       </div>
     </StyledProjectCard>
   );

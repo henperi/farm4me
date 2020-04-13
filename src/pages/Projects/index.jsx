@@ -218,12 +218,12 @@ export function Project() {
           <SizedBox height={10} />
           <SizedBox width="100%" smWidth="100%" height={250}>
             {
-            isFetching ? (
-              <Spinner center size={50} text="fetching your projects..." />) : (
-              renderProjects()
-            )
+            isFetching
+              ? (<Spinner center size={50} text="fetching your projects..." />)
+              : (renderProjects())
               }
           </SizedBox>
+          <SizedBox height={20} />
         </div>
       </div>
     </main>

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import PaystackButton from 'react-paystack';
-
 import { Modal } from '../../UiKit/Modal';
 import { Text } from '../../UiKit/Text';
 import { SizedBox } from '../../UiKit/SizedBox';
@@ -9,8 +7,8 @@ import { moneyFormat } from '../../helpers/moneyFormat';
 import { useGlobalStore } from '../../store';
 import { toKobo } from '../../helpers/toKobo';
 import { startProject } from '../../store/modules/projects/actions';
-import { config } from '../../config';
 import { flashToaster } from '../../store/modules/toaster/actions';
+import { PayStackButton } from '../PayStackButton';
 
 /**
  * The Projects
@@ -36,10 +34,6 @@ export function ProjectPaymentModal(props) {
       return setShowModal(false);
     }
     return null;
-  };
-
-  const close = () => {
-
   };
 
   return (
@@ -98,7 +92,7 @@ export function ProjectPaymentModal(props) {
         </Text>
         <SizedBox height={5} />
 
-        <PaystackButton
+        {/* <PaystackButton
           text="Make Payment"
           className="button"
           callback={callback}
@@ -110,6 +104,14 @@ export function ProjectPaymentModal(props) {
           amount={toKobo(createdProject.totalCost)}
           paystackkey={config.payStack.pubKey}
           tag="button"
+        /> */}
+        <PayStackButton
+          email={state.auth.user.email}
+          amount={toKobo(createdProject.totalCost)}
+          reference={createdProject.reference}
+          callback={callback}
+          label="Make Payment"
+          disabled={createdProject.isPaid}
         />
       </div>
     </Modal>
