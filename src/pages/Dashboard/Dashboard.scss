@@ -10,7 +10,7 @@
 
   $sidebarWidth: 17%;
   $dashboardWidth: 58%;
-  $remainderWidth: calc(100% - ($sidebarWidth + $dashboardWidth));
+  $remainderWidth: calc(100% - #{($sidebarWidth + $dashboardWidth)});
 
   .sidebar {
     height: 100%;
@@ -180,6 +180,52 @@
         border-radius: unset;
       }
     }
+  }
+
+  .floating--sideIcons {
+    position: fixed;
+    width: $remainderWidth;
+    z-index: 200;
+    padding: 15px 2%;
+    right: 0;
+
+    @media screen and (max-width: $sm) {
+      padding: 20px 4%;
+      width: 100%;
+    }
+
+    .icon {
+      margin-left: 20px;
+    }
+  }
+
+  &--partial {
+    position: fixed;
+    width: $remainderWidth;
+    right: 0;
+    z-index: 20;
+    padding: 10px 2%;
+    height: 100vh;
+    // background-color: #f6f9fd;
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    @media screen and (max-width: $sm) {
+      padding: 20px 2%;
+      width: 100%;
+      display: none;
+      background-color: #ebf0fe;
+    }
+
+    .info--section {
+      // height: 100%;
+    }
+  }
+
+  .visible {
+    display: unset;
   }
 
   textarea {

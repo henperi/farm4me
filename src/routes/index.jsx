@@ -10,6 +10,7 @@ import { Project } from '../pages/Projects';
 import { Profile } from '../pages/Profile';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Toaster } from '../components/Toaster/ index';
+// import { useGlobalStore } from '../store';
 
 /**
  * App Routing Component
