@@ -20,6 +20,10 @@ export const axiosErrorHandler = (error, dispatch) => {
       dispatch(removeAuthUser());
       return dispatch(flashToaster({ message: 'Your session has expired, please login again', type: 'lightGrey' }));
     }
+    if (error.response.data.message === 'Unable to authorize you') {
+      dispatch(removeAuthUser());
+      return dispatch(flashToaster({ message: 'You not authorized to access this page', type: 'error' }));
+    }
   } else if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
