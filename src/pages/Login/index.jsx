@@ -53,7 +53,7 @@ export function LoginPage() {
           ...response.errors.detailsObject,
         });
       } else if (response.message) {
-        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+        dispatch(flashToaster({ message: response.message, timeOut: 6000, type: 'error' }));
       }
     }
 
