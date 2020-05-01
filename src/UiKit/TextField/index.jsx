@@ -17,6 +17,8 @@ export const Input = styled.input.attrs((props) => ({
   flex: 3;
   margin: auto 2%;
   width: 100%;
+  max-height: 50px;
+  min-height: 50px;
 `;
 
 Input.defaultProps = {};
@@ -28,7 +30,7 @@ const TextFieldContainer = styled.div`
 export const StyledTextField = styled.div.attrs((props) => ({
   className: props.className,
 }))`
-  background-color: ${(props) => (props.color)};
+  background-color: ${(props) => props.color};
   border-radius: 12px;
 
   ${(props) => props.color
@@ -47,6 +49,7 @@ export const StyledTextField = styled.div.attrs((props) => ({
     border-radius: 12px;
     padding: 15px 20px;
     max-height: 50px;
+    min-height: 50px;
 
     &:first-child {
       margin-left: 0;
@@ -70,7 +73,11 @@ export const TextField = (props) => {
 
         {rightIcon && <div className="icon">{rightIcon}</div>}
       </StyledTextField>
-      {error && <Text color={errorColor} size={12}>{error}</Text>}
+      {error && (
+        <Text color={errorColor} size={12}>
+          {error}
+        </Text>
+      )}
     </TextFieldContainer>
   );
 };

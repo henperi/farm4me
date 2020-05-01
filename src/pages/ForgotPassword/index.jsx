@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../Signup/auth.scss';
-import { Link, /* useHistory, */ Redirect } from 'react-router-dom';
+import { Link, /* useHistory, */ Redirect, useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { TextField } from '../../UiKit/TextField';
 import { Button } from '../../UiKit/Button';
@@ -15,7 +15,7 @@ import { flashToaster } from '../../store/modules/toaster/actions';
  *
  * @returns {JSX.Element} the page
  */
-export function LoginPage() {
+export function ForgotPasswordPage() {
   const { dispatch, state } = useGlobalStore();
 
   const defaultState = {
@@ -37,6 +37,8 @@ export function LoginPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const history = useHistory();
+
   const onSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -44,20 +46,20 @@ export function LoginPage() {
     setmainError('');
 
     /** @type {any} */
-    const response = await dispatch(login(signinData, setIsSubmitting));
+    // const response = await dispatch(login(signinData, setIsSubmitting));
 
-    if (response && response.statusCode > 300) {
-      if (response.errors && response.errors.detailsObject) {
-        setformErrors({
-          ...formErrors,
-          ...response.errors.detailsObject,
-        });
-      } else if (response.message) {
-        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
-      }
-    }
+    // if (response && response.statusCode > 300) {
+    //   if (response.errors && response.errors.detailsObject) {
+    //     setformErrors({
+    //       ...formErrors,
+    //       ...response.errors.detailsObject,
+    //     });
+    //   } else if (response.message) {
+    //     dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+    //   }
+    // }
 
-    return null;
+    return history.push(`/reset-password?email=${signinData.email}`);
   };
 
   if (state.auth.isAuthenticated) {
@@ -76,12 +78,12 @@ export function LoginPage() {
         </div>
       </div>
       <div className="auth--form">
-        <Text color="white" size={23}>
+        <Text color="white" size={20}>
           <Text color="white" size={28} weight="bold">
-            Welcome Back,
+            Hello,
           </Text>
           {' '}
-          Login to monitor your Agricultural Investments..
+          Please enter your email address to begin resetting your password
         </Text>
         <SizedBox height={50} />
         <form onSubmit={onSubmit}>
@@ -94,19 +96,10 @@ export function LoginPage() {
             required
             type="text"
             placeholder="Email"
-            leftIcon="A"
+            leftIcon="E"
             error={formErrors.email}
             errorColor="white"
             onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
-          />
-          <TextField
-            required
-            type="password"
-            placeholder="Password"
-            leftIcon="A"
-            error={formErrors.password}
-            errorColor="white"
-            onChange={(e) => setSigninData({ ...signinData, password: e.target.value })}
           />
 
           <Button
@@ -115,7 +108,7 @@ export function LoginPage() {
             className="row row__crossAxis--center"
             disabled={isSubmitting}
           >
-            Login
+            Submit
             {isSubmitting && <Spinner />}
           </Button>
         </form>
@@ -127,14 +120,6 @@ export function LoginPage() {
             Go To Sign Up Page
           </Text>
         </Link>
-        <SizedBox height={25} />
-        <div className="row row__mainAxis--center">
-          <Link to="/forgot-password" className="link row row__mainAxis--center">
-            <Text color="white" weight="bold">
-              Forgot Password?
-            </Text>
-          </Link>
-        </div>
       </div>
     </main>
   );

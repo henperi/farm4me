@@ -15,7 +15,7 @@ import { flashToaster } from '../../store/modules/toaster/actions';
  *
  * @returns {JSX.Element} the page
  */
-export function LoginPage() {
+export function ResetPasswordPage() {
   const { dispatch, state } = useGlobalStore();
 
   const defaultState = {
@@ -44,18 +44,18 @@ export function LoginPage() {
     setmainError('');
 
     /** @type {any} */
-    const response = await dispatch(login(signinData, setIsSubmitting));
+    // const response = await dispatch(login(signinData, setIsSubmitting));
 
-    if (response && response.statusCode > 300) {
-      if (response.errors && response.errors.detailsObject) {
-        setformErrors({
-          ...formErrors,
-          ...response.errors.detailsObject,
-        });
-      } else if (response.message) {
-        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
-      }
-    }
+    // if (response && response.statusCode > 300) {
+    //   if (response.errors && response.errors.detailsObject) {
+    //     setformErrors({
+    //       ...formErrors,
+    //       ...response.errors.detailsObject,
+    //     });
+    //   } else if (response.message) {
+    //     dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+    //   }
+    // }
 
     return null;
   };
@@ -76,12 +76,12 @@ export function LoginPage() {
         </div>
       </div>
       <div className="auth--form">
-        <Text color="white" size={23}>
+        <Text color="white" size={20}>
           <Text color="white" size={28} weight="bold">
-            Welcome Back,
+            Hello,
           </Text>
           {' '}
-          Login to monitor your Agricultural Investments..
+          Fill out the form and click change password to reset your password
         </Text>
         <SizedBox height={50} />
         <form onSubmit={onSubmit}>
@@ -90,23 +90,39 @@ export function LoginPage() {
               {mainError}
             </Text>
           )}
+          <div>
+            <input type="password" value="value" style={{ opacity: '0' }} />
+          </div>
+          <Text color="white" size={16} weight="bold">
+            Enter the 6 Digit code sent to your email
+          </Text>
           <TextField
             required
-            type="text"
-            placeholder="Email"
-            leftIcon="A"
-            error={formErrors.email}
+            type="email"
+            placeholder="Enter the 6 Digit Code"
+            leftIcon="C"
             errorColor="white"
             onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
           />
+          <SizedBox height={20} />
           <TextField
             required
             type="password"
-            placeholder="Password"
-            leftIcon="A"
-            error={formErrors.password}
+            placeholder="Enter your new password"
+            leftIcon="P"
+            name="password"
             errorColor="white"
-            onChange={(e) => setSigninData({ ...signinData, password: e.target.value })}
+            onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
+          />
+
+          <TextField
+            required
+            type="password"
+            name="passwordRepeat"
+            placeholder="Repeat password"
+            leftIcon="P"
+            errorColor="white"
+            onChange={(e) => setSigninData({ ...signinData, email: e.target.value })}
           />
 
           <Button
@@ -115,7 +131,7 @@ export function LoginPage() {
             className="row row__crossAxis--center"
             disabled={isSubmitting}
           >
-            Login
+            Change Password
             {isSubmitting && <Spinner />}
           </Button>
         </form>
@@ -127,14 +143,6 @@ export function LoginPage() {
             Go To Sign Up Page
           </Text>
         </Link>
-        <SizedBox height={25} />
-        <div className="row row__mainAxis--center">
-          <Link to="/forgot-password" className="link row row__mainAxis--center">
-            <Text color="white" weight="bold">
-              Forgot Password?
-            </Text>
-          </Link>
-        </div>
       </div>
     </main>
   );
