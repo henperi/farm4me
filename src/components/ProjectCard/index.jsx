@@ -1,5 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
+
+import { Link, useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 // import { Button } from '../../UiKit/Button';
 import { SizedBox } from '../../UiKit/SizedBox';
@@ -7,16 +10,8 @@ import { BgColors } from '../../UiKit/theme';
 import { ReactComponent as MoreVert } from '../../assets/more_verti.svg';
 import { ScreenSizes } from '../../UiKit/uiHelper/screenSizes';
 import { AppProgressBar } from '../ProgressBar';
-import { PayStackButton } from '../PayStackButton';
-import { useGlobalStore } from '../../store';
-import { toKobo } from '../../helpers/toKobo';
 import { moneyFormat } from '../../helpers/moneyFormat';
-import { startProject } from '../../store/modules/projects/actions';
-import { flashToaster } from '../../store/modules/toaster/actions';
-
-// import { ReactComponent as PersonIcon } from '../../assets/person.svg';
-
-// BgColors
+import { Button } from '../../UiKit/Button';
 
 const StyledProjectCard = styled.div`
   background-color: ${BgColors.primary};
@@ -24,7 +19,7 @@ const StyledProjectCard = styled.div`
   height: fit-content;
   margin: 10px 0px;
   min-height: 40px;
-  box-shadow: 2px 1px 12px -1px  rgba(71.43206298351288, 89.78888556361198, 255, 0.45);
+  box-shadow: 2px 1px 12px -1px rgba(71.43206298351288, 89.78888556361198, 255, 0.45);
   overflow: hidden;
   margin-left: 3% !important;
   width: 265px;
@@ -32,12 +27,13 @@ const StyledProjectCard = styled.div`
   scroll-snap-align: start;
   padding: 20px;
 
-  ${(props) => props.only && css`
-    @media screen and (max-width: ${ScreenSizes.sm}) {
-      /* width: 80%; */
-      /* margin-right: 3%; */
-    }
-  `}
+  ${(props) => props.only
+    && css`
+      @media screen and (max-width: ${ScreenSizes.sm}) {
+        /* width: 80%; */
+        /* margin-right: 3%; */
+      }
+    `}
 
   .icon--project {
     width: 36px;
@@ -57,8 +53,8 @@ const StyledProjectCard = styled.div`
 
     &::after {
       position: absolute;
-      content: "";
-      background-color: #A9AFF0;
+      content: '';
+      background-color: #a9aff0;
       left: 0;
       top: 0;
       bottom: 0;
@@ -77,32 +73,37 @@ const StyledProjectCard = styled.div`
   .body {
   }
 `;
+/**
+ * @typedef {import('../../store/modules/projects/actions').Project} Project
+ */
 
 /**
  * ProjectCard
- * @param {any} props
+ * @param {{
+ *  project: Project
+ * }} props
  * @returns {JSX.Element} ProjectCard
  */
 export function ProjectCard(props) {
-  const { state, dispatch } = useGlobalStore();
-  /**
-   * @type {import('../../store/modules/projects/actions').Project} project
-   */
-  const farmProject = props.project;
+  const { project } = props;
+  const history = useHistory();
+  // console.log(project);
 
-  const createdAt = new Date(farmProject.createdAt).toDateString();
-  const startedAt = farmProject.startDate ? new Date(farmProject.startDate).toDateString() : 'Not yet stated';
-  const endedAt = farmProject.endDate ? new Date(farmProject.endDate).toDateString() : '';
+  const createdAt = new Date(project.createdAt).toDateString();
+  const startedAt = project.startDate
+    ? new Date(project.startDate).toDateString()
+    : 'Not yet stated';
+  const endedAt = project.endDate ? new Date(project.endDate).toDateString() : '';
 
   const getPercent = () => {
     const today = Date.now();
-    const secondsInADay = (60 * 60 * 24);
+    const secondsInADay = 60 * 60 * 24;
 
-    if (farmProject.startDate && farmProject.endDate) {
-      const constDiff = (farmProject.endDate - farmProject.startDate) / 1000 / secondsInADay;
-      const timeDiff = (farmProject.endDate - today) / 1000 / secondsInADay;
+    if (project.startDate && project.endDate) {
+      const constDiff = (project.endDate - project.startDate) / 1000 / secondsInADay;
+      const timeDiff = (project.endDate - today) / 1000 / secondsInADay;
 
-      if (new Date(today) >= new Date(farmProject.endDate)) {
+      if (new Date(today) >= new Date(project.endDate)) {
         return `${100}%`;
       }
 
@@ -111,85 +112,93 @@ export function ProjectCard(props) {
     return `${0}%`;
   };
 
-  const callback = (response) => {
-    if (response.status === 'success') {
-      dispatch(startProject({
-        transactionRef: response.reference,
-      }));
-      dispatch(flashToaster({ message: 'We are being notified and your project will start as soon as this payment is verified', type: 'lightGrey' }));
-    }
-    return null;
-  };
-
   return (
     <StyledProjectCard {...props} className="col">
-
       <div className="row row__mainAxis--spaceBetween row__crossAxis--center">
         <div className="row row__crossAxis--center">
-          <div className="icon--project row row__crossAxis--center row__mainAxis--center">
-            A
-          </div>
+          <div className="icon--project row row__crossAxis--center row__mainAxis--center">A</div>
           <SizedBox width={10} />
-          <Text size={17} color="white" weight="bold">{farmProject.name}</Text>
+          <Link to={`/projects/${project.id}`}>
+            <Text size={17} color="white" weight="bold">
+              {project.name}
+            </Text>
+          </Link>
         </div>
         <MoreVert className="icon--click" />
       </div>
 
       <SizedBox height={10} />
       <Text size={13} color="white">
-        {farmProject.numberOfHecters}
+        {project.numberOfHecters}
         {' '}
-        hectares @
-        {' '}
-        N
-        {moneyFormat(farmProject.totalCost)}
+        hectares @ N
+        {moneyFormat(project.totalCost)}
       </Text>
-      <Text size={13} color="white">{farmProject.isPaid ? 'Paid' : 'Not Paid'}</Text>
-      {
-        !farmProject.startDate && (
+      <Text size={13} color="white">
+        {project.isPaid ? 'Paid' : 'Not Paid'}
+      </Text>
+      {!project.startDate && (
         <Text size={13} color="white">
           Created on
           {' '}
           {createdAt}
         </Text>
-        )
-      }
+      )}
       <Text size={13} color="white">
         Started on
         {' '}
         {startedAt}
       </Text>
-      {endedAt
-        && (
+      {endedAt && (
         <Text size={13} color="white">
           Ends on
           {' '}
           {endedAt}
         </Text>
-        )}
+      )}
       <SizedBox height={10} />
       <AppProgressBar percent={getPercent()} />
       <Text size={12} className="row row__mainAxis--start" color="white">
-        {farmProject.isPaid ? 'Project Started' : 'Make payment to start project'}
+        {project.isPaid ? 'Project Started' : 'Make payment to start project'}
       </Text>
       <SizedBox height={10} />
       <div className="row row__mainAxis--center">
-        {/* <Button color="lightGrey">View</Button> */}
-        <PayStackButton
+        <Button onClick={() => history.push(`/projects/${project.id}`)} color="lightGrey">View</Button>
+        {/* <PayStackButton
           email={state.auth.user.email}
-          amount={toKobo(farmProject.totalCost)}
-          reference={farmProject.reference}
+          amount={toKobo(project.totalCost)}
+          reference={project.reference}
           callback={callback}
-          label={farmProject.isPaid ? 'Paid' : 'Pay'}
-          disabled={farmProject.isPaid}
-        />
+          label={project.isPaid ? 'Paid' : 'Pay'}
+          disabled={project.isPaid}
+        /> */}
       </div>
     </StyledProjectCard>
   );
 }
 
 ProjectCard.propTypes = {
+  project: PropTypes.shape({
+    numberOfHecters: PropTypes.number,
+    isPaid: PropTypes.bool,
+    name: PropTypes.string,
+    createdAt: PropTypes.number,
+    totalCost: PropTypes.number,
+    season: PropTypes.string,
+    startDate: PropTypes.any,
+    totalReturns: PropTypes.number,
+    profit: PropTypes.number,
+    duration: PropTypes.number,
+    costPerHectare: PropTypes.number,
+    ownerId: PropTypes.string,
+    endDate: PropTypes.any,
+    percentageProfit: PropTypes.number,
+    id: PropTypes.string,
+    reference: PropTypes.string,
+  }).isRequired,
+  only: PropTypes.bool,
 };
 
 ProjectCard.defaultProps = {
+  only: false,
 };

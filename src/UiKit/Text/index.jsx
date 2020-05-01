@@ -74,6 +74,7 @@ const getTextSize = (props) => {
 };
 
 const StyledText = styled.span.attrs(() => ({}))`
+  color: ${(props) => props.hexColor} !important;
   ${(props) => getTextColor(props)};
   font-weight: lighter;
   font-family: 'Open Sans', sans-serif;

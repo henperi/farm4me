@@ -4,6 +4,7 @@ import { projectReducer, projectsInitialState } from './projects/reducer';
 import { profileReducer, profileInitialState } from './profile/reducer';
 import { toasterReducer, toasterInitialState } from './toaster/reducer';
 import { userStatsInitialState, userStatsReducer } from './userStats/reducer';
+import { singleProjectReducer, singleProjectInitialState } from './singleProject/reducer';
 
 export const initialState = {
   app: appInitialState,
@@ -12,11 +13,12 @@ export const initialState = {
   profile: profileInitialState,
   toaster: toasterInitialState,
   userStats: userStatsInitialState,
+  singleProject: singleProjectInitialState,
 };
 
 export const rootReducer = (state, action) => {
   const {
-    app, auth, projects, profile, toaster, userStats,
+    app, auth, projects, profile, toaster, userStats, singleProject,
   } = state;
 
   return {
@@ -26,5 +28,6 @@ export const rootReducer = (state, action) => {
     profile: profileReducer(profile, action),
     toaster: toasterReducer(toaster, action),
     userStats: userStatsReducer(userStats, action),
+    singleProject: singleProjectReducer(singleProject, action),
   };
 };

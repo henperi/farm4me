@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 import { Text } from '../../UiKit/Text';
 import { SizedBox } from '../../UiKit/SizedBox';
@@ -22,6 +22,15 @@ const StyledProgressBar = styled.div`
     width: ${(props) => props.percent};
     border-radius: 12px;
   }
+
+  ${(props) => props.darker
+    && css`
+      background-color: #bec4d2;
+
+      &::after {
+        background-color: #747be5;
+      }
+    `}
 `;
 
 /**
@@ -33,7 +42,9 @@ export function AppProgressBar(props) {
   const { percent } = props;
   return (
     <Fragment>
-      <Text className="row row__mainAxis--end" color="white">{percent}</Text>
+      <Text className="row row__mainAxis--end" color="white">
+        {percent}
+      </Text>
       <SizedBox height={2.5} />
       <StyledProgressBar {...props} />
     </Fragment>
@@ -42,8 +53,10 @@ export function AppProgressBar(props) {
 
 AppProgressBar.propTypes = {
   percent: PropTypes.string,
+  darker: PropTypes.bool,
 };
 
 AppProgressBar.defaultProps = {
   percent: '0',
+  darker: false,
 };

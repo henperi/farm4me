@@ -3,6 +3,7 @@ import httpService from '../../../services/httpService';
 
 import { axiosErrorHandler } from '../../../helpers/axiosErrorHandler';
 import { flashToaster } from '../toaster/actions';
+import { setSingleProject } from '../singleProject/actions';
 
 /**
  * @typedef {import('./reducer').Project} Project
@@ -89,6 +90,7 @@ export const startProject = (startProjectData) => async (dispatch) => {
     } = await httpService.post(`/project/start/${transactionRef}`, startProjectData);
 
     dispatch(updateOneProject(data.updatedProject));
+    dispatch(setSingleProject(data.updatedProject));
 
     dispatch(
       flashToaster({
