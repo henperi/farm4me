@@ -84,6 +84,7 @@ export const createProject = (createProjectData) => async (dispatch) => {
  */
 export const startProject = (startProjectData) => async (dispatch) => {
   const { transactionRef } = startProjectData;
+
   try {
     const {
       data: { data },

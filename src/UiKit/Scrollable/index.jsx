@@ -55,10 +55,12 @@ Scrollable.propTypes = {
   direction: PropTypes.oneOf(['horizontal', 'vertical']),
   hideScrollBar: PropTypes.bool,
   children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 Scrollable.defaultProps = {
   direction: 'horizontal',
   hideScrollBar: false,
   children: <Fragment />,
+  className: '',
 };

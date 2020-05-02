@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './SingleProject.scss';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Text } from '../../UiKit/Text';
 import { Card } from '../../UiKit/Card';
 import { Button } from '../../UiKit/Button';
@@ -27,6 +27,7 @@ export function SingleProject() {
   const [isFetching, setIsFetching] = useState(true);
 
   const { projectId } = useParams();
+  const history = useHistory();
 
   const { singleProject } = state;
 
@@ -201,8 +202,8 @@ export function SingleProject() {
                   disabled={singleProject.isPaid}
                 />
                 <SizedBox height={10} />
-                <Button color="accent" onClick={() => null}>
-                  Download Invoice
+                <Button color="accent" onClick={() => history.push(`/invoice/${singleProject.id}`)}>
+                  View Invoice
                 </Button>
               </div>
             </Card>

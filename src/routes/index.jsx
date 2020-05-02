@@ -13,6 +13,7 @@ import { Toaster } from '../components/Toaster/ index';
 import { SingleProject } from '../pages/SingleProject';
 import { ForgotPasswordPage } from '../pages/ForgotPassword';
 import { ResetPasswordPage } from '../pages/ResetPassword';
+import { Invoice } from '../pages/Invoice';
 // import { useGlobalStore } from '../store';
 
 /**
@@ -33,6 +34,7 @@ export function Routes() {
         <ProtectedRoute exact path="/dashboard" component={Dashboard} />
         <ProtectedRoute exact path="/projects" component={Project} />
         <ProtectedRoute exact path="/projects/:projectId" component={SingleProject} />
+        <ProtectedRoute exact path="/invoice/:projectId" component={Invoice} />
         <ProtectedRoute exact path="/profile" component={Profile} />
       </Switch>
     </BrowserRouter>
