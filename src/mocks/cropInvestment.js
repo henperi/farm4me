@@ -1,5 +1,50 @@
-
 export const cropInvestments = [
+  {
+    investmentId: '1a323e32ded',
+    id: '1a323e32ded',
+    name: 'Melon (Egusi)',
+    costPerHectare: 312125,
+    percentageProfit: 72.72,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    investmentId: '22asd3323e32ded',
+    id: '22asd3323e32ded',
+    name: 'Sorghum (Guinea corn)',
+    costPerHectare: 244025,
+    percentageProfit: 63.91,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    investmentId: '32dedaasaqee333r',
+    id: '32dedaasaqee333r',
+    name: 'Sesame Seeds',
+    costPerHectare: 278075,
+    percentageProfit: 42.4,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  {
+    investmentId: '4ee3qr6ty33r',
+    id: '4ee3qr6ty33r',
+    name: 'Maize',
+    costPerHectare: 227000,
+    percentageProfit: 32.15,
+    duration: 6,
+    season: 'Dry and Wet',
+    insurance: 'Leadway Insurance',
+    refundPercent: '100%',
+  },
+  // Demo
+  /*
   {
     id: '1a2wQrd',
     name: 'Maize Project',
@@ -40,4 +85,5 @@ export const cropInvestments = [
     insurance: 'Leadway Insurance',
     refundPercent: '100%',
   },
+  */
 ];

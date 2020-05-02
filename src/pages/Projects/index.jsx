@@ -79,7 +79,7 @@ export function Project() {
       return dispatch(flashToaster({ message: 'Number of hectares must be a number!', type: 'error' }));
     }
 
-    const investmentId = selectedCrop.id;
+    const { investmentId } = selectedCrop;
     setIsSubmitting(true);
 
     /**

@@ -23,7 +23,6 @@ import { RightSideBar } from '../../components/RightSideBar';
 import { moneyFormat } from '../../helpers/moneyFormat';
 import { fetchProfile } from '../../store/modules/profile/actions';
 import { Divider } from '../../UiKit/Divider';
-import { generateShortId } from '../../helpers/generateShortId';
 import { Scrollable } from '../../UiKit/Scrollable';
 
 /**
@@ -68,7 +67,6 @@ export function Invoice() {
     }
     return null;
   };
-
 
   const creationDate = new Date(singleProject.createdAt).toDateString();
   const startedDate = singleProject.startDate
@@ -125,7 +123,7 @@ export function Invoice() {
     <main className="dashboard row">
       <Sidebar />
 
-      {isFetching ? (
+      {isFetching || !singleProject.name ? (
         <div className="dashboard--main">
           <Spinner center size={50} text="Gathering necessary information" />
         </div>
@@ -141,7 +139,7 @@ export function Invoice() {
                   </Text>
                   <Text>
                     Id: #
-                    {generateShortId().toUpperCase()}
+                    {String(singleProject.invoiceId).toUpperCase()}
                   </Text>
                 </div>
                 <div className="col">
@@ -232,7 +230,7 @@ export function Invoice() {
                     </Text>
                     <Text size={28}>
                       N
-                      {moneyFormat(singleProject.totalReturns)}
+                      {moneyFormat(Number(singleProject.totalReturns).toFixed())}
                     </Text>
                   </div>
                   <Text size={12}>

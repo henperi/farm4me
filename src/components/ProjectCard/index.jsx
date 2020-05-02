@@ -18,8 +18,9 @@ const StyledProjectCard = styled.div`
   border-radius: 25px;
   height: fit-content;
   margin: 10px 0px;
+  margin-bottom: 30px;
   min-height: 40px;
-  box-shadow: 2px 1px 12px -1px rgba(71.43206298351288, 89.78888556361198, 255, 0.45);
+  box-shadow: 0px 35px 18px -25px rgba(71.43206298351288, 89.78888556361198, 255, 0.35);
   overflow: hidden;
   margin-left: 3% !important;
   width: 265px;
@@ -87,13 +88,6 @@ const StyledProjectCard = styled.div`
 export function ProjectCard(props) {
   const { project } = props;
   const history = useHistory();
-  // console.log(project);
-
-  const createdAt = new Date(project.createdAt).toDateString();
-  const startedAt = project.startDate
-    ? new Date(project.startDate).toDateString()
-    : 'Not yet stated';
-  const endedAt = project.endDate ? new Date(project.endDate).toDateString() : '';
 
   const getPercent = () => {
     const today = Date.now();
@@ -134,28 +128,6 @@ export function ProjectCard(props) {
         hectares @ N
         {moneyFormat(project.totalCost)}
       </Text>
-      <Text size={13} color="white">
-        {project.isPaid ? 'Paid' : 'Not Paid'}
-      </Text>
-      {!project.startDate && (
-        <Text size={13} color="white">
-          Created on
-          {' '}
-          {createdAt}
-        </Text>
-      )}
-      <Text size={13} color="white">
-        Started on
-        {' '}
-        {startedAt}
-      </Text>
-      {endedAt && (
-        <Text size={13} color="white">
-          Ends on
-          {' '}
-          {endedAt}
-        </Text>
-      )}
       <SizedBox height={10} />
       <AppProgressBar percent={getPercent()} />
       <Text size={12} className="row row__mainAxis--start" color="white">
@@ -164,14 +136,6 @@ export function ProjectCard(props) {
       <SizedBox height={10} />
       <div className="row row__mainAxis--center">
         <Button onClick={() => history.push(`/projects/${project.id}`)} color="lightGrey">View</Button>
-        {/* <PayStackButton
-          email={state.auth.user.email}
-          amount={toKobo(project.totalCost)}
-          reference={project.reference}
-          callback={callback}
-          label={project.isPaid ? 'Paid' : 'Pay'}
-          disabled={project.isPaid}
-        /> */}
       </div>
     </StyledProjectCard>
   );

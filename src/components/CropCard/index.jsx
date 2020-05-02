@@ -56,10 +56,18 @@ const StyledCard = styled.div`
 export function CropCard(props) {
   const { crop, onSelect, selectedId } = props;
   const {
-    id, name, costPerHectare, percentageProfit, duration, season, insurance, refundPercent,
+    investmentId,
+    name,
+    costPerHectare,
+    percentageProfit,
+    duration,
+    season,
+    insurance,
+    refundPercent,
   } = crop;
 
-  const profit = costPerHectare * (1 + percentageProfit / 100);
+  const profit = costPerHectare * (percentageProfit / 100);
+  const returns = costPerHectare * (1 + percentageProfit / 100);
 
   return (
     <StyledCard {...props}>
@@ -74,17 +82,25 @@ export function CropCard(props) {
       </div>
       <div className="body col">
         <Text color="#333539">
-          Estimated Profit:
+          Profit:
           {' '}
           <Text color="accent">
             N
-            {moneyFormat(profit)}
+            {moneyFormat(Number(profit).toFixed())}
           </Text>
         </Text>
         <Text color="#333539">
           Duration:
           {' '}
           <Text color="accent">{`${duration} months`}</Text>
+        </Text>
+        <Text color="#333539">
+          Estimated Returns:
+          {' '}
+          <Text color="accent">
+            N
+            {moneyFormat(Number(returns).toFixed())}
+          </Text>
         </Text>
         <div className="hidden">
           <Text color="#333539">
@@ -105,8 +121,12 @@ export function CropCard(props) {
           <Text color="accent">Money Back Guaranteed</Text>
         </div>
         <SizedBox height={10} />
-        <Button type="button" color={selectedId === id ? 'primary' : 'accent'} onClick={() => onSelect(id)}>
-          {selectedId === id ? 'Selected' : 'Select'}
+        <Button
+          type="button"
+          color={selectedId === investmentId ? 'primary' : 'accent'}
+          onClick={() => onSelect(investmentId)}
+        >
+          {selectedId === investmentId ? 'Selected' : 'Select'}
         </Button>
       </div>
     </StyledCard>
@@ -116,6 +136,7 @@ export function CropCard(props) {
 CropCard.propTypes = {
   crop: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    investmentId: PropTypes.string.isRequired,
     name: PropTypes.string,
     costPerHectare: PropTypes.number,
     percentageProfit: PropTypes.number,

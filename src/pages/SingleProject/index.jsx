@@ -87,7 +87,7 @@ export function SingleProject() {
     <main className="dashboard row">
       <Sidebar />
 
-      {isFetching ? (
+      {(isFetching || !singleProject.name) ? (
         <div className="dashboard--main">
           <Spinner center size={50} text="Gathering necessary information" />
         </div>
@@ -185,7 +185,7 @@ export function SingleProject() {
                 </Text>
                 <Text size={16}>
                   N
-                  {moneyFormat(singleProject.totalReturns)}
+                  {moneyFormat(Number(singleProject.totalReturns).toFixed())}
                 </Text>
               </div>
               <Text size={12}>

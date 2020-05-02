@@ -18,6 +18,8 @@ import { types } from './types';
     percentageProfit: number,
     id: string,
     reference: string,
+    investmentId; string,
+    invoiceId: string
 }} Project
  */
 
