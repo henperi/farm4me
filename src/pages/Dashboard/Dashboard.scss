@@ -185,7 +185,7 @@
   .floating--sideIcons {
     position: fixed;
     width: $remainderWidth;
-    z-index: 200;
+    z-index: 10;
     padding: 15px 2%;
     right: 0;
 
@@ -217,10 +217,6 @@
       width: 100%;
       display: none;
       background-color: #ebf0fe;
-    }
-
-    .info--section {
-      // height: 100%;
     }
   }
 

@@ -109,16 +109,16 @@ export function ProjectCard(props) {
   return (
     <StyledProjectCard {...props} className="col">
       <div className="row row__mainAxis--spaceBetween row__crossAxis--center">
-        <div className="row row__crossAxis--center">
-          <div className="icon--project row row__crossAxis--center row__mainAxis--center">A</div>
-          <SizedBox width={10} />
+        <SizedBox width="90%">
           <Link to={`/projects/${project.id}`}>
             <Text size={17} color="white" weight="bold">
               {project.name}
             </Text>
           </Link>
-        </div>
-        <MoreVert className="icon--click" />
+        </SizedBox>
+        <SizedBox width="2%">
+          <MoreVert className="icon--click" />
+        </SizedBox>
       </div>
 
       <SizedBox height={10} />
@@ -135,7 +135,9 @@ export function ProjectCard(props) {
       </Text>
       <SizedBox height={10} />
       <div className="row row__mainAxis--center">
-        <Button onClick={() => history.push(`/projects/${project.id}`)} color="lightGrey">View</Button>
+        <Button onClick={() => history.push(`/projects/${project.id}`)} color="lightGrey">
+          View
+        </Button>
       </div>
     </StyledProjectCard>
   );

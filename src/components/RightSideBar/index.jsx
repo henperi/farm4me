@@ -15,6 +15,10 @@ import './RightSideBar.scss';
 import insuranceCert from '../../assets/doccuments/insurance.pdf';
 // @ts-ignore
 import ServiceAgreement from '../../assets/doccuments/ServiceAgreement.pdf';
+// @ts-ignore
+import CAC from '../../assets/doccuments/CAC.pdf';
+// @ts-ignore
+import PoliceCertificate from '../../assets/doccuments/PoliceCertificate.pdf';
 
 /**
  * Sidebar
@@ -68,7 +72,11 @@ export function RightSideBar() {
               Official Doccuments
             </Text>
             <SizedBox height={10} />
-            <div className="row row__crossAxis--center padding__bottom--10 pdf-link">
+            <div
+              className="row row__crossAxis--center padding__bottom--10 pdf-link"
+              onClick={() => openPdfFileModal(CAC)}
+              role="presentation"
+            >
               <StarIcon className="icon" />
               <Text color="#333539" size={14}>
                 CAC Certificate
@@ -94,10 +102,14 @@ export function RightSideBar() {
                 Service Agreement
               </Text>
             </div>
-            <div className="row row__crossAxis--center padding__bottom--10 pdf-link">
+            <div
+              className="row row__crossAxis--center padding__bottom--10 pdf-link"
+              onClick={() => openPdfFileModal(PoliceCertificate)}
+              role="presentation"
+            >
               <StarIcon className="icon" />
               <Text color="#333539" size={14}>
-                Police Service Agreement
+                Police Character Certificate
               </Text>
             </div>
           </div>

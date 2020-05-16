@@ -9,6 +9,8 @@ import { useGlobalStore } from '../../store';
 import { fetchProfile, addBankInfo, addAddressInfo } from '../../store/modules/profile/actions';
 import { Spinner } from '../../UiKit/Spinner';
 import { flashToaster } from '../../store/modules/toaster/actions';
+import { Card } from '../../UiKit/Card';
+import './Profile.scss';
 
 /**
  * The Projects
@@ -44,7 +46,6 @@ export function Profile() {
   const [isFetching, setIsFetching] = useState(true);
   const [isSubmittingBankInfo, setIsSubmittingBankInfo] = useState(false);
   const [isSubmittingAddressInfo, setIsSubmittingAddressInfo] = useState(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,6 +128,48 @@ export function Profile() {
       }
     }
     setIsSubmittingAddressInfo(false);
+  };
+
+  /** @type {[
+   * { validId: string, photo: string },
+   * React.Dispatch<React.SetStateAction<{
+   * validId: string | ArrayBuffer, photo: string | ArrayBuffer
+   * }>>]} */
+  const [imagePreview, setimagePreview] = useState({
+    validId: '',
+    photo: '',
+  });
+  // const [uploadPercent, setuploadPercent] = useState(0);
+  // const [showProgress, setshowProgress] = useState(false);
+
+  const handleNewImage = (event, key) => {
+    const mb = 1000000;
+    const maxFileSize = 5 * mb;
+    const validFormats = ['image/png', 'image/jpg', 'image/jpeg'];
+
+    if (event.target.files.length) {
+      const reader = new FileReader();
+      const imageFile = event.target.files[0];
+
+      if (imageFile.size > maxFileSize) {
+        return alert('file size is too large, please select an image less than 5mb');
+      }
+
+      if (!validFormats.includes(imageFile.type)) {
+        return alert('file format not supported, please select a valid image');
+      }
+
+      reader.onload = () => {
+        setimagePreview({
+          ...imagePreview,
+          [key]: reader.result,
+        });
+      };
+
+      return reader.readAsDataURL(imageFile);
+    }
+
+    return null;
   };
 
   return (
@@ -313,39 +356,52 @@ export function Profile() {
             <Text color="#333539" size={18}>
               Personal Documents
             </Text>
-            <SizedBox width="100%" smWidth="100%">
-              <div className="fileUpload">
-                <TextField
-                  type="file"
-                  color="#F6F9FD"
-                  required
-                  placeholder="Address"
-                  leftIcon="A"
-                  accept="image/png, image/jpeg"
-                />
-                <Text className="label" color="primary" size={13}>
-                  Upload a Valid Id Card
-                </Text>
-              </div>
-            </SizedBox>
             <SizedBox height={10} />
-            <SizedBox width="100%" smWidth="100%">
-              <div className="fileUpload">
-                <TextField
-                  type="file"
-                  color="#F6F9FD"
-                  required
-                  placeholder="Address"
-                  leftIcon="A"
-                  accept="image/png, image/jpeg"
-                />
-                <Text className="label" color="primary" size={13}>
-                  Your profile picture
-                </Text>
-              </div>
-            </SizedBox>
+
+            <Card className="row row__mainAxis--spaceBetween">
+              <SizedBox width="48%" smWidth="100%">
+                <div className="col col__mainAxis--center col__crossAxis--center ">
+                  <div className="photo-box">
+                    {imagePreview.validId && <img src={imagePreview.validId} alt="" />}
+                  </div>
+                  Upload your Valid ID Card
+                  <Button size="sm" color="accent" className="upload-button">
+                    Choose Image
+                    <input
+                      type="file"
+                      accept="image/jpg, image/png, image/jpeg"
+                      onChange={(e) => handleNewImage(e, 'validId')}
+                    />
+                  </Button>
+                  <SizedBox height={10} />
+                </div>
+              </SizedBox>
+
+              <SizedBox width="48%" smWidth="100%">
+                <div className="col col__mainAxis--center col__crossAxis--center ">
+                  <div className="photo-box">
+                    {imagePreview.photo && <img src={imagePreview.photo} alt="" />}
+                  </div>
+                  Upload your Photo
+                  <Button size="sm" color="accent" className="upload-button">
+                    Choose Image
+                    <input
+                      type="file"
+                      accept="image/jpg, image/png, image/jpeg"
+                      onChange={(e) => handleNewImage(e, 'photo')}
+                    />
+                  </Button>
+                  <SizedBox height={10} />
+                </div>
+              </SizedBox>
+
+
+              <SizedBox width="100%">
+
+                <div className="row row__mainAxis--center"><Button>Upload and Save</Button></div>
+              </SizedBox>
+            </Card>
             <SizedBox height={10} />
-            <Button>Save</Button>
           </div>
         </div>
       )}
