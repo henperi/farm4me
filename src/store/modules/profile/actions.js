@@ -36,13 +36,13 @@ export const fetchProfile = () => async (dispatch) => {
 /**
  * @description A thunk action to add a user's personal info
  * @typedef {{
-  *  firstName: string,
-  *  lastName: string,
-  *  phone: string,
-  * }} PersonalInfo
-  * @param {PersonalInfo} personalInfo
-  * @returns {Function} dispatch an action
-  */
+ *  firstName: string,
+ *  lastName: string,
+ *  phone: string,
+ * }} PersonalInfo
+ * @param {PersonalInfo} personalInfo
+ * @returns {Function} dispatch an action
+ */
 export const updatePersonalInfo = (personalInfo) => async (dispatch) => {
   try {
     const {
@@ -58,13 +58,13 @@ export const updatePersonalInfo = (personalInfo) => async (dispatch) => {
 /**
  * @description A thunk action to add a user's bank info
  * @typedef {{
-*   bankName: string,
-*   accountNumber: string,
-*   accountName: string,
-* }} BankInfo
-* @param {BankInfo} bankInfo
-* @returns {Function} dispatch an action
-*/
+ *   bankName: string,
+ *   accountNumber: string,
+ *   accountName: string,
+ * }} BankInfo
+ * @param {BankInfo} bankInfo
+ * @returns {Function} dispatch an action
+ */
 export const addBankInfo = (bankInfo) => async (dispatch) => {
   try {
     const {
@@ -85,13 +85,13 @@ export const addBankInfo = (bankInfo) => async (dispatch) => {
 /**
  * @description A thunk action to add a user's address info
  * @typedef {{
-  *   city: string,
-  *   state: string,
-  *   addressLine1: string,
-  * }} AddressInfo
-  * @param {AddressInfo} addressInfo
-  * @returns {Function} dispatch an action
-  */
+ *   city: string,
+ *   state: string,
+ *   addressLine1: string,
+ * }} AddressInfo
+ * @param {AddressInfo} addressInfo
+ * @returns {Function} dispatch an action
+ */
 export const addAddressInfo = (addressInfo) => async (dispatch) => {
   try {
     const {
@@ -110,20 +110,61 @@ export const addAddressInfo = (addressInfo) => async (dispatch) => {
 };
 
 /**
+ * @description A thunk action to add a user's address info
+ * @param {{ validId: File, photo: File }} imageFiles
+ * @param {Function} progressCallback
+ * @returns {Function} dispatch an action
+ */
+export const addProfileDocImages = (imageFiles, progressCallback = () => null) => async (
+  dispatch,
+) => {
+  const onUploadProgress = (progressEvent) => {
+    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+    console.log(percentCompleted);
+
+    progressCallback(percentCompleted);
+  };
+
+  const formData = new FormData();
+  formData.append('validId', imageFiles?.validId);
+  formData.append('photo', imageFiles?.photo);
+
+  try {
+    const {
+      data: { data },
+    } = await httpService.post('/profile/upload-images', formData, {
+      onUploadProgress,
+    });
+
+    dispatch(flashToaster({ message: 'Duccoments uploaded successfully', type: 'success' }));
+    console.log(data);
+
+    return dispatch(setProfile(data.profile));
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    }
+    return axiosErrorHandler(error, dispatch);
+  }
+};
+
+/**
  * @description A thunk action to add a user's docs info
  * @typedef {{
-  *   profileImage: string,
-  *   vaidIdCard: string,
-  * }} DocsInfo
-  * @param {DocsInfo} docsInfo
-  * @returns {Function} dispatch an action
-  */
+ *   profileImage: string,
+ *   vaidIdCard: string,
+ * }} DocsInfo
+ * @param {DocsInfo} docsInfo
+ * @returns {Function} dispatch an action
+ */
 export const addDocsInfo = (docsInfo) => async (dispatch) => {
   try {
     const {
       data: { data },
     } = await httpService.post('/profile/add-docs', docsInfo);
-    dispatch(flashToaster({ message: 'Doccument information added successfully', type: 'success' }));
+    dispatch(
+      flashToaster({ message: 'Doccument information added successfully', type: 'success' }),
+    );
 
     return dispatch(setProfile(data.profile));
   } catch (error) {

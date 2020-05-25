@@ -6,7 +6,12 @@ import { SizedBox } from '../../UiKit/SizedBox';
 
 import { Sidebar } from '../../components/Sidebar';
 import { useGlobalStore } from '../../store';
-import { fetchProfile, addBankInfo, addAddressInfo } from '../../store/modules/profile/actions';
+import {
+  fetchProfile,
+  addBankInfo,
+  addAddressInfo,
+  addProfileDocImages,
+} from '../../store/modules/profile/actions';
 import { Spinner } from '../../UiKit/Spinner';
 import { flashToaster } from '../../store/modules/toaster/actions';
 import { Card } from '../../UiKit/Card';
@@ -139,6 +144,14 @@ export function Profile() {
     validId: '',
     photo: '',
   });
+
+
+  /** @type {[
+   * { validId: File, photo: File },
+   * React.Dispatch<React.SetStateAction<{
+   * validId: File, photo: File
+   * }>>]} */
+  const [filesToUpload, setfilesToUpload] = useState();
   // const [uploadPercent, setuploadPercent] = useState(0);
   // const [showProgress, setshowProgress] = useState(false);
 
@@ -164,12 +177,48 @@ export function Profile() {
           ...imagePreview,
           [key]: reader.result,
         });
+
+        setfilesToUpload({
+          ...filesToUpload,
+          [key]: imageFile,
+        });
       };
+
+
+      // console.log(imageFile);
 
       return reader.readAsDataURL(imageFile);
     }
 
     return null;
+  };
+
+  const submitDocImagesForm = async (event) => {
+    event.preventDefault();
+    // setIsSubmittingAddressInfo(true);
+    // setaddressFormErrors({
+    //   city: '',
+    //   state: '',
+    //   addressLine1: '',
+    // });
+    if (!filesToUpload) {
+      return dispatch(flashToaster({ message: 'Select a new image and try again', timeOut: 9000, type: 'error' }));
+    }
+
+    /** @type {any} */
+    const response = await dispatch(addProfileDocImages(filesToUpload));
+
+    if (response && response.statusCode > 300) {
+      if (response.errors && response.errors.detailsObject) {
+        // setaddressFormErrors({
+        //   ...addressFormErrors,
+        //   ...response.errors.detailsObject,
+        // });
+      } else if (response.message) {
+        dispatch(flashToaster({ message: response.message, timeOut: 9000 }));
+      }
+    }
+    // setIsSubmittingAddressInfo(false);
   };
 
   return (
@@ -358,49 +407,51 @@ export function Profile() {
             </Text>
             <SizedBox height={10} />
 
-            <Card className="row row__mainAxis--spaceBetween">
-              <SizedBox width="48%" smWidth="100%">
-                <div className="col col__mainAxis--center col__crossAxis--center ">
-                  <div className="photo-box">
-                    {imagePreview.validId && <img src={imagePreview.validId} alt="" />}
+            <form onSubmit={submitDocImagesForm}>
+              <Card className="row row__mainAxis--spaceBetween">
+                <SizedBox width="48%" smWidth="100%">
+                  <div className="col col__mainAxis--center col__crossAxis--center ">
+                    <div className="photo-box">
+                      <img src={imagePreview.validId || state.profile.docs.validId} alt="" />
+                    </div>
+                    Upload your Valid ID Card
+                    <Button size="sm" color="accent" className="upload-button">
+                      Choose Image
+                      <input
+                        type="file"
+                        accept="image/jpg, image/png, image/jpeg"
+                        onChange={(e) => handleNewImage(e, 'validId')}
+                      />
+                    </Button>
+                    <SizedBox height={10} />
                   </div>
-                  Upload your Valid ID Card
-                  <Button size="sm" color="accent" className="upload-button">
-                    Choose Image
-                    <input
-                      type="file"
-                      accept="image/jpg, image/png, image/jpeg"
-                      onChange={(e) => handleNewImage(e, 'validId')}
-                    />
-                  </Button>
-                  <SizedBox height={10} />
-                </div>
-              </SizedBox>
+                </SizedBox>
 
-              <SizedBox width="48%" smWidth="100%">
-                <div className="col col__mainAxis--center col__crossAxis--center ">
-                  <div className="photo-box">
-                    {imagePreview.photo && <img src={imagePreview.photo} alt="" />}
+                <SizedBox width="48%" smWidth="100%">
+                  <div className="col col__mainAxis--center col__crossAxis--center ">
+                    <div className="photo-box">
+                      <img src={imagePreview.photo || state.profile.docs.photo} alt="" />
+                    </div>
+                    Upload your Photo
+                    <Button size="sm" color="accent" className="upload-button">
+                      Choose Image
+                      <input
+                        type="file"
+                        accept="image/jpg, image/png, image/jpeg"
+                        onChange={(e) => handleNewImage(e, 'photo')}
+                      />
+                    </Button>
+                    <SizedBox height={10} />
                   </div>
-                  Upload your Photo
-                  <Button size="sm" color="accent" className="upload-button">
-                    Choose Image
-                    <input
-                      type="file"
-                      accept="image/jpg, image/png, image/jpeg"
-                      onChange={(e) => handleNewImage(e, 'photo')}
-                    />
-                  </Button>
-                  <SizedBox height={10} />
-                </div>
-              </SizedBox>
+                </SizedBox>
 
-
-              <SizedBox width="100%">
-
-                <div className="row row__mainAxis--center"><Button>Upload and Save</Button></div>
-              </SizedBox>
-            </Card>
+                <SizedBox width="100%" smWidth="100%" className="margin__top--10">
+                  <div className="row row__mainAxis--center">
+                    <Button type="submit">Upload and Save</Button>
+                  </div>
+                </SizedBox>
+              </Card>
+            </form>
             <SizedBox height={10} />
           </div>
         </div>

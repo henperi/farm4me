@@ -1,7 +1,7 @@
 const defaultCallback = (x) => x;
 
 export const uploadFile = async ({
-  file,
+  imageFiles,
   progressCallback = defaultCallback,
 }) => {
   const onUploadProgress = (progressEvent) => {
@@ -11,7 +11,7 @@ export const uploadFile = async ({
   };
 
   const data = new FormData();
-  data.append('file', file);
+  data.append('imageFiles', imageFiles);
 
   return onUploadProgress();
 };

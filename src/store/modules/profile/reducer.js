@@ -14,12 +14,10 @@ export const profileInitialState = {
     addressLine1: '',
   },
   docs: {
-    profileImage: '',
-    validIdCard: '',
+    photo: '',
+    validId: '',
   },
 };
-
-// console.log('profileInitialState.bank', Object.values(profileInitialState.bank));
 
 export const profileReducer = (state = profileInitialState, action) => {
   switch (action.type) {
